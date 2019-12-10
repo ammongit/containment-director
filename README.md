@@ -1,6 +1,8 @@
 ## The Objective
 
-Build the final HTML from its component parts: (requires Python 3.6+)
+Build the final HTML from its component parts.
+
+Requires Python3.6+ and jinja.
 
 ```
 $ ./build.py
