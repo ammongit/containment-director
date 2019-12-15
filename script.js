@@ -104,6 +104,16 @@ function randomAddress() {
   return randRange(3000, 1) + ' ' + street;
 }
 
+var ANOMALY_TYPES = [
+  'artifact',
+  'cognitohazard',
+  'humanoid',
+  'mechanical',
+  'ontokinetic',
+  'sarkic',
+  'spectral',
+  'thaumaturgic',
+];
 
 // Helpers
 function numericSuffix(number) {
