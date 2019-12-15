@@ -1,2 +1,2 @@
 Jinja2>=2.8.0
-htmlmin>=0.1.0
+css-html-js-minify>=2.5.0

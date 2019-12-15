@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from htmlmin import Minifier
+from css_html_js_minify import css_minify, js_minify
 from jinja2 import Template
 
 if __name__ == '__main__':
@@ -19,22 +19,11 @@ if __name__ == '__main__':
 
     # Create template
     template = Template(raw_template)
-    output = template.render(
-        style=style,
-        script=script,
+    html = template.render(
+        style=css_minify(style),
+        script=js_minify(script),
         page=page,
     )
-
-    minifier = Minifier(
-        remove_comments=True,
-        remove_empty_space=True,
-        remove_all_empty_space=True,
-        reduce_boolean_attributes=True,
-        remove_optional_attribute_quotes=False,
-        keep_pre=True,
-    )
-
-    html = minifier.minify(output)
 
     with open('output.html', 'w') as file:
         file.write(html)
