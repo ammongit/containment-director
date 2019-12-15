@@ -97,6 +97,15 @@ body {
     word-break: normal;
 }
 
+input,
+textarea,
+select,
+button,
+meter,
+progress {
+    font-family: 'Lato', sans-serif;
+}
+
 pre * {
     font-family: 'PT Mono', 'Andale Mono', 'Courier New', Courier, monospace;
     max-width: 90vw;
@@ -154,3 +163,8 @@ a:visited {
 
 /* Other styles */
 
+.align-right {
+    display: flex;
+    margin-left: auto;
+    margin-right: 0.5em;
+}
