@@ -117,6 +117,16 @@ pre * {
     white-space: pre-wrap;
 }
 
+blockquote {
+    border-style: dashed;
+    border-width: 0.063em;
+    background-color: rgb(244, 244, 244);
+    border-bottom-color: rgba(12, 12, 12, 0.25);
+    box-shadow: 0em 0.063em 0.125em rgba(12, 12, 12, 0.1);
+    display: flow-root;
+    padding: 0 1em;
+}
+
 code, tt {
     font-family: 'PT Mono', 'Andale Mono', 'Courier New', Courier, monospace;
     overflow-wrap: break-word;
