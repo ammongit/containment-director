@@ -7,6 +7,7 @@ function intro2() {
 function intro3() {
   document.getElementById('intro2').style = 'display: none';
   // TODO
+document.getElementById('command').style = '';
 }
 
 // Anomalies

@@ -149,6 +149,33 @@ hr {
     padding: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Poppins", sans-serif;
+}
+
+h1 {
+    color: rgb(12, 12, 12);
+    font-weight: 700;
+    margin: 0.7em 0 0.6em;
+    padding: 0 0 0.25em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 900;
+    letter-spacing: 0.063rem;
+    margin: 0.5em 0 0.4em;
+    padding: 0;
+}
+
 ul {
     list-style: square;
 }
@@ -186,4 +213,22 @@ body {
     display: flex;
     margin-left: auto;
     margin-right: 0;
+}
+
+#command {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#command .command-column {
+    flex: 1 1;
+}
+
+#command .command-column:nth-child(n+2) {
+    border-left: 1px solid black;
+}
+
+#command .command-column h3 {
+    text-align: center;
+    border-bottom: 1px solid black;
 }
