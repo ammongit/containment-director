@@ -2,9 +2,10 @@
 
 Build the final HTML from its component parts.
 
-Requires Python3.6+ and jinja.
+Requires Python3.6+.
 
 ```
+$ pip install -r requirements.txt
 $ ./build.py
 ```
 
