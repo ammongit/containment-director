@@ -10,6 +10,17 @@ function intro3() {
 document.getElementById('command').style = '';
 }
 
+var logEntries = [];
+
+function appendLog(entry) {
+  logEntries.push(entry);
+  if (logEntries.length > 14) {
+    logEntries.shift();
+  }
+
+  document.getElementById('log').innerHTML = logEntries.join('<br>');
+}
+
 // Anomalies
 var STREETS = [
   'York Avenue',
