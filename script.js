@@ -1,10 +1,18 @@
+// Current context
+var context = {
+  state: 'intro1',
+  anomaly: null,
+};
+
 // Transitions
 function intro1() {
+  context.state = 'intro2';
   document.getElementById('intro1').style = 'display: none';
   document.getElementById('intro2').style = '';
 }
 
 function intro2() {
+  context.state = 'command';
   document.getElementById('intro2').style = 'display: none';
   document.getElementById('command').style = '';
 }
