@@ -1,23 +1,54 @@
-// Current context
+// State variables
 var context = {
   state: 'intro1',
   anomaly: null,
-  reports: [],
-  actions: [],
-  recovery: [],
 };
 
-// Transitions
-function intro1() {
+var anomalies = {};
+var actions = [];
+var recovery = [];
+
+// States or actions
+function intro2() {
   context.state = 'intro2';
   document.getElementById('intro1').style = 'display: none';
   document.getElementById('intro2').style = '';
 }
 
-function intro2() {
-  context.state = 'command';
+function commandFirst1() {
+  context.state = 'command-first1';
   document.getElementById('intro2').style = 'display: none';
   document.getElementById('command').style = '';
+
+  // Generate first anomaly
+  var anomaly = generateAnomaly(
+    PREMADE_ANOMALY_ATTRIBUTES.first,
+    'leaking blue slime',
+    ORIGINS.eyewitness,
+  );
+
+  // TODO set actions
+
+  setNotice([
+    '<p>First, look below at ' + anomaly.number + '.',
+    'It\'s bold since it is currently being investigated.</p>',
+    '<button class="align-right" onclick="commandFirst2()">Next</button>',
+  ]);
+}
+
+function commandFirst2() {
+  context.state = 'command-first2';
+
+  setNotice([
+    '<p>Select an appropriate action based on this report.',
+    'For now, we should send some field agents to investigate.</p>',
+  ]);
+}
+
+function commandFirst3() {
+  context.state = 'command-first3';
+
+  // TODO
 }
 
 function designate() {
@@ -28,12 +59,40 @@ function dismiss() {
   // TODO
 }
 
+// Column state
+function setNotice(parts) {
+  document.getElementById('notice').innerHTML = parts.join(' ');
+}
+
+function addAction(action) {
+  actions.push(action);
+  updateActions();
+}
+
+function appendRecovery(entry) {
+  recovery.push(entry);
+
+  if (recovery.length >= 20) {
+    recovery.shift();
+  }
+
+  updateRecovery();
+}
+
 // DOM
 function updateReports() {
   // TODO
-  var parts = context.reports.map(function(report) {
-    return '[' + report.number + '] ' + report.tip;
-  });
+  var parts = Object
+    .values(anomalies)
+    .map(function(anomaly) {
+      var html = '[' + anomaly.number + ']';
+
+      if (anomaly.number === context.anomaly.number) {
+        html = '<b>' + html + '</b>';
+      }
+
+      return html + ' ' + anomaly.tip;
+    });
 
   document.getElementById('reports').innerHTML = parts.join('');
 }
@@ -44,7 +103,7 @@ function updateActions() {
 }
 
 function updateRecovery() {
-  var parts = context.recovery.map(function(entry) {
+  var parts = recovery.map(function(entry) {
     return '<li>' + entry + '</li>';
   });
 
@@ -145,13 +204,22 @@ function randomLocation() {
     street = number + numericSuffix(number) + ' Street';
   }
 
-  return randRange(1, 2500) + ' ' + street;
+  return randRange(1, 1700) + ' ' + street;
 }
+
+var PREMADE_ANOMALY_ATTRIBUTES = {
+  first: {
+    'artifact': 1,
+    'ectoentropic': 1,
+    'indestructible': 0.2,
+  },
+};
 
 var ANOMALY_ATTRIBUTES = [
   'artifact',
   'cognitohazard',
   'compulsion',
+  'ectoentropic',
   'humanoid',
   'immobile',
   'indestrubile',
@@ -162,8 +230,6 @@ var ANOMALY_ATTRIBUTES = [
   'teleportation',
   'thaumaturgic',
 ];
-
-var anomalies = {};
 
 function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
   var item = generateItemNo();
@@ -181,15 +247,18 @@ function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
       }
     });
 
+  var origin = generateOrigin(occurrence, location, origin);
   var anomaly = {
     number: item,
     location: location,
-    tip: tip,
-    cleanup: cleanup,
+    tip: origin.tip,
+    cleanup: origin.cleanup,
     attributes: attributes,
   };
 
   anomalies[item] = anomaly;
+  context.anomaly = anomaly;
+  updateReports();
   return anomaly;
 }
 
@@ -200,7 +269,7 @@ function generateItemNo() {
     number = 'PAR-' + randRange(10000, 99999);
   } while(anomalies[number] !== undefined);
 
-  return item;
+  return number;
 }
 
 var ORIGINS = {
@@ -212,8 +281,8 @@ var ORIGINS = {
       memories: [2, 12],
     },
   },
-  eyewitnessReports: {
-    tip: 'Eyewitnesses report that %OCCURRENCE% nearby %LOCATION%',
+  eyewitness: {
+    tip: 'Eyewitnesses report %OCCURRENCE% nearby %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [0, 20],
@@ -221,23 +290,23 @@ var ORIGINS = {
     },
   },
   socialMedia: {
-    tip: 'Social media reports suggest that %OCCURRENCE% at %LOCATION%',
+    tip: 'Social media reports suggest %OCCURRENCE% at %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [10, 40],
       memories: [8, 25],
     },
   },
-  policeReports: {
-    tip: 'Police communications suggest that %OCCURRENCE% at %LOCATION%',
+  police: {
+    tip: 'Police communications suggest %OCCURRENCE% at %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [5, 10],
       memories: [4, 12],
     },
   },
-  newsReports: {
-    tip: 'Local news report says that %OCCURRENCE% nearby %LOCATION%',
+  news: {
+    tip: 'Local news report says %OCCURRENCE% nearby %LOCATION%',
     cleanup: {
       waste: [10, 30],
       records: [15, 40],

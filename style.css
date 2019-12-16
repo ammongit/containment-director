@@ -240,7 +240,7 @@ body {
 
 .command-column-contents ul {
     padding: 0;
-    padding-left: 1em;
+    padding-left: 0.5em;
 }
 
 #command .command-column:nth-child(n+2) {
@@ -248,7 +248,8 @@ body {
 }
 
 #notice {
-    height: 8em;
+    height: 9em;
+    margin: 0.75em;
 }
 
 .button-row {
@@ -259,6 +260,6 @@ body {
 
 .button-row button {
     flex: 1 1;
-    margin-left: 1em;
-    margin-right: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
