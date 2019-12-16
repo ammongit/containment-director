@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from css_html_js_minify import css_minify, js_minify
 from jinja2 import Template
 
 if __name__ == '__main__':
@@ -20,8 +19,8 @@ if __name__ == '__main__':
     # Create template
     template = Template(raw_template)
     html = template.render(
-        style=css_minify(style),
-        script=js_minify(script),
+        style=style,
+        script=script,
         page=page,
     )
 
