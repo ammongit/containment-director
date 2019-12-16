@@ -224,7 +224,15 @@ body {
 
 #command .command-column {
     flex: 1 1;
+}
+
+#command .command-column .command-column-contents {
     margin: 0.5em;
+}
+
+#command .command-column .command-column-contents ul {
+    padding: 0;
+    padding-left: 1em;
 }
 
 #command .command-column:nth-child(n+2) {

@@ -10,6 +10,19 @@ function intro3() {
 document.getElementById('command').style = '';
 }
 
+// Columns
+var tipEntries = [];
+
+function generateTipHTML(tip) {
+  return '<li>' + tip.description + '</li>';
+}
+
+function appendTip(tip) {
+  tipEntries.push(tip);
+
+  document.getElementById('tips').innerHTML = tipEntries.map(generateTipHTML).join('');
+}
+
 var logEntries = [];
 
 function appendLog(entry) {
@@ -92,6 +105,8 @@ var PLACES = [
   'Governor\'s Island',
   'Liberty Island',
   'Roosevelt Island',
+  'Central Park',
+  'Prospect Park',
 ];
 
 function randomAddress() {
