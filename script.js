@@ -112,6 +112,7 @@ var ANOMALY_ATTRIBUTES = [
   'ontokinetic',
   'sarkic',
   'spectral',
+  'teleportation',
   'thaumaturgic',
 ];
 
@@ -157,7 +158,7 @@ function generateItemNo() {
 
 var ORIGINS = {
   rumors: {
-    tip: 'Rumors have been circulating that %OCCURRENCE% near %LOCATION%',
+    tip: 'Rumors are circulating of %OCCURRENCE% near %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [0, 15],
@@ -165,7 +166,7 @@ var ORIGINS = {
     },
   },
   eyewitnessReports: {
-    tip: 'Eyewitnesses say that %OCCURRENCE% nearby %LOCATION%',
+    tip: 'Eyewitnesses report that %OCCURRENCE% nearby %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [0, 20],
@@ -173,7 +174,7 @@ var ORIGINS = {
     },
   },
   socialMedia: {
-    tip: 'A number of social media posts suggest that %OCCURRENCE% at %LOCATION%',
+    tip: 'Social media reports suggest that %OCCURRENCE% at %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [10, 40],
@@ -181,7 +182,7 @@ var ORIGINS = {
     },
   },
   policeReports: {
-    tip: 'Embedded agents within the NYPD report %OCCURRENCE% at %LOCATION%',
+    tip: 'Police communications suggest that %OCCURRENCE% at %LOCATION%',
     cleanup: {
       waste: [0, 30],
       records: [5, 10],
@@ -189,7 +190,7 @@ var ORIGINS = {
     },
   },
   newsReports: {
-    tip: 'A local news report suggests that %OCCURRENCE% nearby %LOCATION%',
+    tip: 'Local news report says that %OCCURRENCE% nearby %LOCATION%',
     cleanup: {
       waste: [10, 30],
       records: [15, 40],
@@ -197,11 +198,19 @@ var ORIGINS = {
     },
   },
   sensors: {
-    tip: 'Foundation sensors detected unusual %OCCURRENCE% around the area of %LOCATION%',
+    tip: 'Foundation sensors detect %OCCURRENCE% around the area of %LOCATION%',
     cleanup: {
       waste: [20, 60],
       records: [0, 20],
       memories: [0, 20],
+    },
+  },
+  surveillance: {
+    tip: 'Foundation surveillance detects %OCCURRENCE% around the area of %LOCATION%',
+    cleanup: {
+      waste: [0, 60],
+      records: [0, 40],
+      memories: [0, 40],
     },
   },
 ];
