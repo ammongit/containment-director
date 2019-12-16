@@ -215,31 +215,3 @@ body {
     margin-left: auto;
     margin-right: 0;
 }
-
-#command {
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100%;
-}
-
-#command .command-column {
-    flex: 1 1;
-}
-
-#command .command-column .command-column-contents {
-    margin: 0.5em;
-}
-
-#command .command-column .command-column-contents ul {
-    padding: 0;
-    padding-left: 1em;
-}
-
-#command .command-column:nth-child(n+2) {
-    border-left: 1px solid black;
-}
-
-#command .command-column h4 {
-    text-align: center;
-    border-bottom: 1px solid black;
-}

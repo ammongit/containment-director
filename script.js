@@ -7,31 +7,6 @@ function intro2() {
 function intro3() {
   document.getElementById('intro2').style = 'display: none';
   // TODO
-document.getElementById('command').style = '';
-}
-
-// Columns
-var tipEntries = [];
-
-function generateTipHTML(tip) {
-  return '<li>' + tip.description + '</li>';
-}
-
-function appendTip(tip) {
-  tipEntries.push(tip);
-
-  document.getElementById('tips').innerHTML = tipEntries.map(generateTipHTML).join('');
-}
-
-var logEntries = [];
-
-function appendLog(entry) {
-  logEntries.push(entry);
-  if (logEntries.length > 14) {
-    logEntries.shift();
-  }
-
-  document.getElementById('log').innerHTML = logEntries.join('<br>');
 }
 
 // Anomalies
