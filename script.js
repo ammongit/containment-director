@@ -196,11 +196,12 @@ function randomLocation() {
   } else {
     // Numbered street, with E/W
     var number = randRange(1, 200);
+    var suffix = numericSuffix(number);
     if (number < 110) {
       var direction = randRange(2) ? 'West' : 'East';
       number = direction + ' ' + number;
     }
-    street = number + numericSuffix(number) + ' Street';
+    street = number + suffix + ' Street';
   }
 
   return randRange(1, 1700) + ' ' + street;
