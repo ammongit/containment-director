@@ -90,7 +90,7 @@ function randomLocation() {
     street = randElement(STREETS);
   } else {
     // Numbered street, with E/W
-    var number = randRange(200, 1);
+    var number = randRange(1, 200);
     if (number < 110) {
       var direction = randRange(2) ? 'West' : 'East';
       number = direction + ' ' + number;
@@ -98,7 +98,7 @@ function randomLocation() {
     street = number + numericSuffix(number) + ' Street';
   }
 
-  return randRange(3000, 1) + ' ' + street;
+  return randRange(1, 2500) + ' ' + street;
 }
 
 var ANOMALY_ATTRIBUTES = [
@@ -149,7 +149,7 @@ function generateItemNo() {
   var number;
 
   do {
-    number = 'PAR-' + randRange(99999, 10000);
+    number = 'PAR-' + randRange(10000, 99999);
   } while(anomalies[number] !== undefined);
 
   return item;
@@ -223,7 +223,7 @@ function generateOrigin(occurrence, location, origin = null) {
       var minBound = entry[1][0];
       var maxBound = entry[1][1];
 
-      cleanup[key] = randRange(maxBound, minBound);
+      cleanup[key] = randRange(minBound, maxBound);
     });
 
   return {
@@ -244,7 +244,16 @@ function numericSuffix(number) {
   }
 }
 
-function randRange(upper, lower = 0) {
+function randRange(a, b = null) {
+  var upper, lower;
+  if (b === null) {
+    upper = a;
+    lower = 0;
+  } else {
+    upper = b;
+    lower = a;
+  }
+
   return Math.floor(Math.random() * (upper - lower)) + lower;
 }
 
