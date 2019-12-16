@@ -1,12 +1,7 @@
 // Transitions
-function intro2() {
+function intro1() {
   document.getElementById('intro1').style = 'display: none';
   document.getElementById('intro2').style = '';
-}
-
-function intro3() {
-  document.getElementById('intro2').style = 'display: none';
-  // TODO
 }
 
 // Anomalies
@@ -84,7 +79,7 @@ var PLACES = [
   'Prospect Park',
 ];
 
-function randomAddress() {
+function randomLocation() {
   if (Math.random() < 0.1) {
     return randElement(PLACES);
   }
@@ -97,7 +92,7 @@ function randomAddress() {
     // Numbered street, with E/W
     var number = randRange(200, 1);
     if (number < 110) {
-      var direction = randRange(1) ? 'West' : 'East';
+      var direction = randRange(2) ? 'West' : 'East';
       number = direction + ' ' + number;
     }
     street = number + numericSuffix(number) + ' Street';
@@ -106,16 +101,136 @@ function randomAddress() {
   return randRange(3000, 1) + ' ' + street;
 }
 
-var ANOMALY_TYPES = [
+var ANOMALY_ATTRIBUTES = [
   'artifact',
   'cognitohazard',
+  'compulsion',
   'humanoid',
+  'immobile',
+  'indestrubile',
   'mechanical',
   'ontokinetic',
   'sarkic',
   'spectral',
   'thaumaturgic',
 ];
+
+var anomalies = {};
+
+function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
+  var item = generateItemNo();
+  var location = randomLocation();
+  var attributes = [];
+
+  Object
+    .entries(attributeProbabilities)
+    .forEach(function(entry) {
+      var attr = entry[0];
+      var prob = entry[1];
+
+      if (Math.random() < prob) {
+        attributes.push(attr);
+      }
+    });
+
+  var anomaly = {
+    number: item,
+    location: location,
+    tip: tip,
+    cleanup: cleanup,
+    attributes: attributes,
+  };
+
+  anomalies[item] = anomaly;
+  return anomaly;
+}
+
+function generateItemNo() {
+  var number;
+
+  do {
+    number = 'PAR-' + randRange(99999, 10000);
+  } while(anomalies[number] !== undefined);
+
+  return item;
+}
+
+var ORIGINS = {
+  rumors: {
+    tip: 'Rumors have been circulating that %OCCURRENCE% near %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [0, 15],
+      memories: [2, 12],
+    },
+  },
+  eyewitnessReports: {
+    tip: 'Eyewitnesses say that %OCCURRENCE% nearby %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [0, 20],
+      memories: [4, 16],
+    },
+  },
+  socialMedia: {
+    tip: 'A number of social media posts suggest that %OCCURRENCE% at %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [10, 40],
+      memories: [8, 25],
+    },
+  },
+  policeReports: {
+    tip: 'Embedded agents within the NYPD report %OCCURRENCE% at %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [5, 10],
+      memories: [4, 12],
+    },
+  },
+  newsReports: {
+    tip: 'A local news report suggests that %OCCURRENCE% nearby %LOCATION%',
+    cleanup: {
+      waste: [10, 30],
+      records: [15, 40],
+      memories: [20, 50],
+    },
+  },
+  sensors: {
+    tip: 'Foundation sensors detected unusual %OCCURRENCE% around the area of %LOCATION%',
+    cleanup: {
+      waste: [20, 60],
+      records: [0, 20],
+      memories: [0, 20],
+    },
+  },
+];
+
+function generateOrigin(occurrence, location, origin = null) {
+  if (origin === null) {
+    origin = randElement(Object.values(ORIGINS));
+  }
+
+  var tip = origin.tip
+    .replace('%OCCURRENCE%', occurrence)
+    .replace('%LOCATION%', location);
+
+  var cleanup = {};
+  Object
+    .entries(origin.cleanup)
+    .forEach(function(entry) {
+      var key = entry[0];
+      var minBound = entry[1][0];
+      var maxBound = entry[1][1];
+
+      cleanup[key] = randRange(maxBound, minBound);
+    });
+
+  return {
+    tip: tip,
+    cleanup: cleanup,
+  };
+}
 
 // Helpers
 function numericSuffix(number) {
