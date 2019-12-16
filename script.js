@@ -4,6 +4,19 @@ function intro1() {
   document.getElementById('intro2').style = '';
 }
 
+function intro2() {
+  document.getElementById('intro2').style = 'display: none';
+  document.getElementById('command').style = '';
+}
+
+function designate() {
+  // TODO
+}
+
+function dismiss() {
+  // TODO
+}
+
 // Anomalies
 var STREETS = [
   'York Avenue',

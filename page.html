@@ -33,13 +33,25 @@
 
 <div id="intro2" style="display: none">
   <p>
-    We've received a few potential anomaly reports (PARs). Below you can
+    We've received a few potential anomaly reports (PARs).
+    These may be anomalous objects, people, or events, but occasionally are false positives.
   </p>
+
+  <p>
+    You will investigate one at a time, and must either dismiss the report or request an SCP
+    designation in order to mark it as complete.
+  </p>
+
+  <p>
+    Your supervisor, Site Director Sandoval, will receive automated reports on your progress in this role.
+  </p>
+
+  <button class="align-right" onclick="intro2()">Next</button>
 </div>
 
 <div id="command" style="display: none">
   <div class="command-column">
-    <div id="notice" class="command-row"></div>
+    <div class="command-row" id="notice"></div>
 
     <div class="command-row">
       <h4>Reports</h4>
@@ -48,17 +60,22 @@
         <ul id="tips"></ul>
       </div>
     </div>
+
+    <div class="command-row">
+      <button id="btn-designate" onclick="designate()">Request Designation</button>
+      <button id="btn-dismiss" onclick="dismiss()">Dismiss Report</button>
+    </div>
   </div>
 
   <div class="command-column">
     <h4>Actions</h4>
 
-    <div id="actions" class="command-column-contents"></div>
+    <div class="command-column-contents" id="actions"></div>
   </div>
 
   <div class="command-column">
     <h4>Recovery Log</h4>
 
-    <div id="recovery" class="command-column-contents"></div>
+    <div class="command-column-contents" id="recovery"></div>
   </div>
 </div>

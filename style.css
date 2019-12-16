@@ -246,7 +246,6 @@ body {
     border-left: 1px solid black;
 }
 
-#command .command-column h4 {
-    text-align: center;
-    border-bottom: 1px solid black;
+#notice {
+    height: 8em;
 }
