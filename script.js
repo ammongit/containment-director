@@ -30,8 +30,7 @@ function commandFirst1() {
   // TODO set actions
 
   setNotice([
-    '<p>First, look below at ' + anomaly.number + '.',
-    'It\'s bold since it is currently being investigated.</p>',
+    '<p>First, look at the description for ' + anomaly.number + '.</p>',
     '<button class="align-right" onclick="commandFirst2()">Next</button>',
   ]);
 }
@@ -40,8 +39,8 @@ function commandFirst2() {
   context.state = 'command-first2';
 
   setNotice([
-    '<p>Select an appropriate action based on this report.',
-    'For now, we should send some field agents to investigate.</p>',
+    '<p>There isn\'t much information here.',
+    'We should send some field agents to investigate.</p>',
   ]);
 }
 
