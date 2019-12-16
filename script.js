@@ -2,6 +2,9 @@
 var context = {
   state: 'intro1',
   anomaly: null,
+  reports: [],
+  actions: [],
+  recovery: [],
 };
 
 // Transitions
@@ -23,6 +26,29 @@ function designate() {
 
 function dismiss() {
   // TODO
+}
+
+// DOM
+function updateReports() {
+  // TODO
+  var parts = context.reports.map(function(report) {
+    return '[' + report.number + '] ' + report.tip;
+  });
+
+  document.getElementById('reports').innerHTML = parts.join('');
+}
+
+function updateActions() {
+  // TODO
+  document.getElementById('actions').innerHTML = 'TODO';
+}
+
+function updateRecovery() {
+  var parts = context.recovery.map(function(entry) {
+    return '<li>' + entry + '</li>';
+  });
+
+  document.getElementById('recovery').innerHTML = parts.join('');
 }
 
 // Anomalies
