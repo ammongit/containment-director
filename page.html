@@ -51,7 +51,19 @@
 
 <div id="command" style="display: none">
   <div class="command-column">
-    <div class="command-row" id="notice"></div>
+    <div class="command-row">
+      <blockquote id="notice"></blockquote>
+    </div>
+
+    <div class="command-row button-row">
+      <button id="btn-designate" onclick="designate()" disabled>
+        Request Designation
+      </button>
+
+      <button id="btn-dismiss" onclick="dismiss()" disabled>
+        Dismiss Report
+      </button>
+    </div>
 
     <div class="command-row">
       <h4>Reports</h4>
@@ -59,11 +71,6 @@
       <div class="command-column-contents">
         <ul id="tips"></ul>
       </div>
-    </div>
-
-    <div class="command-row">
-      <button id="btn-designate" onclick="designate()">Request Designation</button>
-      <button id="btn-dismiss" onclick="dismiss()">Dismiss Report</button>
     </div>
   </div>
 

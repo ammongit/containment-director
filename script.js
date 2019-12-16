@@ -226,7 +226,7 @@ var ORIGINS = {
       memories: [0, 40],
     },
   },
-];
+};
 
 function generateOrigin(occurrence, location, origin = null) {
   if (origin === null) {

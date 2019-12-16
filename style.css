@@ -218,19 +218,20 @@ body {
 
 #command {
     display: flex;
-    flex-wrap: nowrap;
     height: 100%;
+    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
 #command .command-column {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
     flex: 1 1;
 }
 
-#command .command-column .command-row {
-    flex: 1 1;
+#command h4 {
+    text-align: center;
+    margin-left: 2em;
+    margin-right: 2em;
+    border-bottom: 1px solid black;
 }
 
 .command-column-contents {
@@ -248,4 +249,16 @@ body {
 
 #notice {
     height: 8em;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.button-row button {
+    flex: 1 1;
+    margin-left: 1em;
+    margin-right: 1em;
 }
