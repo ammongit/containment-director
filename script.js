@@ -15,8 +15,8 @@ function intro2() {
   document.getElementById('intro2').style = '';
 }
 
-function commandFirst1() {
-  context.state = 'command-first1';
+function commandFirst() {
+  context.state = 'command-first';
   document.getElementById('intro2').style = 'display: none';
   document.getElementById('command').style = '';
 
@@ -30,8 +30,8 @@ function commandFirst1() {
   // TODO set actions
 
   setNotice([
-    '<p>First, look at the description for ' + anomaly.number + '.</p>',
-    '<button class="align-right" onclick="commandFirst2()">Next</button>',
+    '<p>The currently active report, ' + anomaly.number + ', is bold.',
+    'There isn\'t a ton of information, we should send some field agents.</p>',
   ]);
 }
 
