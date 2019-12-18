@@ -78,8 +78,7 @@ function updateReports() {
 
 function updateActions() {
   var parts = actions.map(function(action) {
-    var html = '<button action=';
-    html += '"' + action.functionName + '"';
+    var html = '<button action="runAction(\'' + action.name + '\')"';
 
     if (!action.enabled) {
       html += ' disabled';
