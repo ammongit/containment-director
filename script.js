@@ -31,25 +31,13 @@ function commandFirst() {
 
   setNotice([
     '<p>The currently active report, ' + anomaly.number + ', is bold.',
-    'There isn\'t a ton of information, we should send some field agents.</p>',
-  ]);
-}
-
-function commandFirst2() {
-  context.state = 'command-first2';
-
-  setNotice([
-    '<p>There isn\'t much information here.',
     'We should send some field agents to investigate.</p>',
   ]);
+
+  updateActions();
 }
 
-function commandFirst3() {
-  context.state = 'command-first3';
-
-  // TODO
-}
-
+// Actions
 function designate() {
   // TODO
 }
