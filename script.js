@@ -2,7 +2,7 @@
 var context = {
   state: 'intro1',
   anomaly: null,
-  attributes: [],
+  attributes: new Set(),
 };
 
 var anomalies = {};
@@ -94,7 +94,7 @@ function updateActions() {
 }
 
 function needsPersonnel(action) {
-  return action.attributes.includes('needsPersonnel') && context.attributes.includes('personnel');
+  return action.attributes.includes('needsPersonnel') && context.attributes.has('personnel');
 }
 
 function updateRecovery() {
@@ -122,7 +122,27 @@ function clearCurrentAnomaly() {
   var item = context.anomaly.item;
   delete anomalies[item];
   context.anomaly = null;
-  context.attributes = [];
+  context.attributes.clear();
+}
+
+function runAction(actionName) {
+  var action = findAction(actionName);
+
+  for (var i = 0; i < action.attributes.length; i++) {
+    context.attributes.add(action.attributes[i]);
+  }
+
+  ;
+}
+
+function findAction(actionName) {
+  for (var i = 0; i < ACTIONS.length; i++) {
+    if (ACTIONS[i].name === actionName) {
+      return ACTIONS[i];
+    }
+  }
+
+  throw new Error('No action found with name: ' + actionName);
 }
 
 var ACTIONS = [
