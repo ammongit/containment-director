@@ -68,7 +68,6 @@ function appendRecovery(entry) {
 
 // DOM
 function updateReports() {
-  // TODO
   var parts = Object
     .values(anomalies)
     .map(function(anomaly) {
@@ -78,23 +77,24 @@ function updateReports() {
         html = '<b>' + html + '</b>';
       }
 
-      return html + ' ' + anomaly.tip;
+      html += ' ' + anomaly.tip;
+
+      return '<p>' + html + '</p>';
     });
 
   document.getElementById('reports').innerHTML = parts.join('');
 }
 
 function updateActions() {
-  // TODO
-  document.getElementById('actions').innerHTML = 'TODO';
+  var parts = actions.map(function(action) {
+    return '<li>' + action.description + '</li>';
+  });
+
+  document.getElementById('actions').innerHTML = parts.join('');
 }
 
 function updateRecovery() {
-  var parts = recovery.map(function(entry) {
-    return '<li>' + entry + '</li>';
-  });
-
-  document.getElementById('recovery').innerHTML = parts.join('');
+  document.getElementById('recovery').innerHTML = recovery.join('<br>');
 }
 
 // Anomalies
@@ -170,6 +170,7 @@ var PLACES = [
   'Roosevelt Island',
   'Central Park',
   'Prospect Park',
+  'known entrance to the Wanderer\'s Library',
 ];
 
 function randomLocation() {
