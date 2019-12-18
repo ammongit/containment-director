@@ -78,7 +78,16 @@ function updateReports() {
 
 function updateActions() {
   var parts = actions.map(function(action) {
-    return '<li>' + action.description + '</li>';
+    var html = '<button action=';
+    html += '"' + action.functionName + '"';
+
+    if (!action.enabled) {
+      html += ' disabled';
+    }
+
+    html += '>Order</button>' + action.description;
+
+    return '<p>' + html + '</p>';
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
@@ -101,40 +110,49 @@ var ACTIONS = [
   {
     name: 'sendAgents',
     description: 'Send field agents.',
+    functionName: 'actionSendAgents',
     cost: 20,
   },
   {
     name: 'sendDclass',
     description: 'Send D-class personnel.',
+    functionName: 'actionSendDclass',
     cost: 35,
   },
   {
     name: 'quarantine',
     description: 'Instruct on-site personnel to quarantine area.',
+    functionName: 'actionQuarantine',
     cost: 40,
   },
   {
     name: 'amnesticize',
     description: 'Amnesticize nearby or affected civilians.',
+    functionName: 'actionAmnesticize',
     cost: 15,
   },
   {
     name: 'misinfo',
     description: 'Disseminate misinformation to cover up an anomaly.',
+    functionName: 'actionMisinfo',
+    cost: 25,
   },
   {
     name: 'sendPi1',
     description: 'Send MTF-Pi-1 ("City Slickers"). Specializes in urban operations.',
+    functionName: 'actionSendPi1',
     cost: 70,
   },
   {
     name: 'sendBeta7',
     description: 'Send MTF-Beta-7 ("Maz Hatters"). Specializes in biological, chemical, and radiological hazards',
+    functionName: 'actionSendBeta7',
     cost: 85,
   },
   {
     name: 'sendGamma5',
     description: 'Send MTF-Gamma-5 ("Red Herrings"). Specializes in public misinformation and amnestic operations.',
+    functionName: 'actionSendGamma5',
     cost: 100,
   },
 ];

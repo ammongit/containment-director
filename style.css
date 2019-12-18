@@ -252,6 +252,10 @@ body {
     margin: 0.75em;
 }
 
+#actions button {
+    margin-right: 0.5em;
+}
+
 .button-row {
     display: flex;
     flex-wrap: nowrap;
