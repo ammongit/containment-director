@@ -34,16 +34,7 @@ function commandFirst() {
     'We should send some field agents to investigate.</p>',
   ]);
 
-  updateActions();
-}
-
-// Actions
-function designate() {
-  // TODO
-}
-
-function dismiss() {
-  // TODO
+  setAvailableActions(1);
 }
 
 // Column state
@@ -95,6 +86,66 @@ function updateActions() {
 
 function updateRecovery() {
   document.getElementById('recovery').innerHTML = recovery.join('<br>');
+}
+
+// Actions
+function designate() {
+  // TODO
+}
+
+function dismiss() {
+  // TODO
+}
+
+var ACTIONS = [
+  {
+    name: 'sendAgents',
+    description: 'Send field agents.',
+    cost: 20,
+  },
+  {
+    name: 'sendDclass',
+    description: 'Send D-class personnel.',
+    cost: 35,
+  },
+  {
+    name: 'quarantine',
+    description: 'Instruct on-site personnel to quarantine area.',
+    cost: 40,
+  },
+  {
+    name: 'amnesticize',
+    description: 'Amnesticize nearby or affected civilians.',
+    cost: 15,
+  },
+  {
+    name: 'misinfo',
+    description: 'Disseminate misinformation to cover up an anomaly.',
+  },
+  {
+    name: 'sendPi1',
+    description: 'Send MTF-Pi-1 ("City Slickers"). Specializes in urban operations.',
+    cost: 70,
+  },
+  {
+    name: 'sendBeta7',
+    description: 'Send MTF-Beta-7 ("Maz Hatters"). Specializes in biological, chemical, and radiological hazards',
+    cost: 85,
+  },
+  {
+    name: 'sendGamma5',
+    description: 'Send MTF-Gamma-5 ("Red Herrings"). Specializes in public misinformation and amnestic operations.',
+    cost: 100,
+  },
+];
+
+function setAvailableActions(level, disabled = []) {
+  actions = ACTIONS.slice(0, level);
+  actions.forEach(function(action) {
+    action.enabled = !disabled.includes(action.name);
+  });
+
+  updateActions();
 }
 
 // Anomalies
