@@ -2,6 +2,7 @@
 var context = {
   state: 'intro1',
   anomaly: null,
+  attributes: [],
 };
 
 var anomalies = {};
@@ -117,6 +118,7 @@ function clearCurrentAnomaly() {
   var item = context.anomaly.item;
   delete anomalies[item];
   context.anomaly = null;
+  context.attributes = [];
 }
 
 var ACTIONS = [
@@ -131,32 +133,6 @@ var ACTIONS = [
     attributes: [
       'agents',
       'personnel',
-    ],
-  },
-  {
-    name: 'sendDclass',
-    description: 'Send D-class personnel.',
-    costs: {
-      site: 10,
-      records: 0,
-      memories: 10,
-    },
-    attributes: [
-      'd-class',
-      'personnel',
-    ],
-  },
-  {
-    name: 'interrogate',
-    description: 'Interrogate civilians.',
-    costs: {
-      site: 0,
-      records: 0,
-      memories: 2,
-    },
-    attributes: [
-      'requiresPersonnel',
-      'gatherInfo',
     ],
   },
   {
@@ -373,16 +349,20 @@ function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
   var location = randomLocation();
   var attributes = [];
 
-  Object
-    .entries(attributeProbabilities)
-    .forEach(function(entry) {
-      var attr = entry[0];
-      var prob = entry[1];
+  var isAnomalous = Math.random() < 0.8;
 
-      if (Math.random() < prob) {
-        attributes.push(attr);
-      }
-    });
+  if (isAnomalous) {
+    Object
+      .entries(attributeProbabilities)
+      .forEach(function(entry) {
+        var attr = entry[0];
+        var prob = entry[1];
+
+        if (Math.random() < prob) {
+          attributes.push(attr);
+        }
+      });
+  }
 
   var origin = generateOrigin(occurrence, location, origin);
   var anomaly = {
@@ -391,6 +371,7 @@ function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
     tip: origin.tip,
     cleanup: origin.cleanup,
     attributes: attributes,
+    isAnomalous: isAnomalous,
   };
 
   anomalies[item] = anomaly;
