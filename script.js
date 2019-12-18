@@ -124,50 +124,111 @@ var ACTIONS = [
   {
     name: 'sendAgents',
     description: 'Send field agents.',
-    functionName: 'actionSendAgents',
-    cost: 20,
+    costs: {
+      site: 5,
+      records: 0,
+      memories: 5,
+    },
+    attributes: [
+      'agents',
+      'personnel',
+    ],
   },
   {
     name: 'sendDclass',
     description: 'Send D-class personnel.',
-    functionName: 'actionSendDclass',
-    cost: 35,
+    costs: {
+      site: 10,
+      records: 0,
+      memories: 10,
+    },
+    attributes: [
+      'd-class',
+      'personnel',
+    ],
+  },
+  {
+    name: 'interrogate',
+    description: 'Interrogate civilians.',
+    costs: {
+      site: 0,
+      records: 0,
+      memories: 2,
+    },
+    attributes: [
+      'requiresPersonnel',
+      'gatherInfo',
+    ],
   },
   {
     name: 'quarantine',
-    description: 'Instruct on-site personnel to quarantine area.',
-    functionName: 'actionQuarantine',
-    cost: 40,
+    description: 'Quarantine the affected area.',
+    costs: {
+      site: 10,
+      records: 5,
+      memories: 15,
+    },
+    attributes: [
+      'requiresPersonnel',
+      'quarantine',
+    ],
   },
   {
     name: 'amnesticize',
-    description: 'Amnesticize nearby or affected civilians.',
+    description: 'Amnesticize affected civilians.',
     functionName: 'actionAmnesticize',
-    cost: 15,
+    costs: {
+      site: 10,
+      records: -5,
+      memories: -20,
+    },
+    attributes: [
+      'requiresPersonnel',
+      'amnestics',
+    ],
   },
   {
     name: 'misinfo',
-    description: 'Disseminate misinformation to cover up an anomaly.',
-    functionName: 'actionMisinfo',
-    cost: 25,
+    description: 'Disseminate misinformation.',
+    costs: {
+      site: 10,
+      records: -20,
+      memories: -5,
+    },
+    attributes: [
+      'requiresPersonnel',
+      'misinfo',
+    ],
   },
   {
     name: 'sendPi1',
     description: 'Send MTF-Pi-1 ("City Slickers"). Specializes in urban operations.',
-    functionName: 'actionSendPi1',
-    cost: 70,
-  },
-  {
-    name: 'sendBeta7',
-    description: 'Send MTF-Beta-7 ("Maz Hatters"). Specializes in biological, chemical, and radiological hazards',
-    functionName: 'actionSendBeta7',
-    cost: 85,
+    costs: {
+      site: 20,
+      records: 0,
+      memories: 2,
+    },
+    attributes: [
+      'taskForce',
+      'agents',
+      'personnel',
+    ],
   },
   {
     name: 'sendGamma5',
     description: 'Send MTF-Gamma-5 ("Red Herrings"). Specializes in public misinformation and amnestic operations.',
-    functionName: 'actionSendGamma5',
-    cost: 100,
+    costs: {
+      site: 25,
+      records: -100,
+      memories: -100,
+    },
+    attributes: [
+      'taskForce',
+      'agents',
+      'personnel',
+      'amnestics',
+      'misinfo',
+    ],
   },
 ];
 
