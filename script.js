@@ -99,11 +99,25 @@ function updateRecovery() {
 
 // Actions
 function designate() {
+  appendRecovery(context.anomaly.item + ' has been preliminarily contained, and an SCP designation has been requested.');
+
   // TODO
+
+  clearCurrentAnomaly();
 }
 
 function dismiss() {
+  appendRecovery(context.anomaly.item + ' has been dismissed as resolved or non-anomalous.');
+
   // TODO
+
+  clearCurrentAnomaly();
+}
+
+function clearCurrentAnomaly() {
+  var item = context.anomaly.item;
+  delete anomalies[item];
+  context.anomaly = null;
 }
 
 var ACTIONS = [
