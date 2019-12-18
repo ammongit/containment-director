@@ -81,7 +81,7 @@ function updateActions() {
   var parts = actions.map(function(action) {
     var html = '<button action="runAction(\'' + action.name + '\')"';
 
-    if (!action.enabled) {
+    if (!action.enabled || !needsPersonnel(action)) {
       html += ' disabled';
     }
 
@@ -91,6 +91,10 @@ function updateActions() {
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
+}
+
+function needsPersonnel(action) {
+  return action.attributes.includes('needsPersonnel') && context.attributes.includes('personnel');
 }
 
 function updateRecovery() {
@@ -131,7 +135,6 @@ var ACTIONS = [
       memories: 5,
     },
     attributes: [
-      'agents',
       'personnel',
     ],
   },
@@ -144,7 +147,7 @@ var ACTIONS = [
       memories: 15,
     },
     attributes: [
-      'requiresPersonnel',
+      'needsPersonnel',
       'quarantine',
     ],
   },
@@ -158,7 +161,7 @@ var ACTIONS = [
       memories: -20,
     },
     attributes: [
-      'requiresPersonnel',
+      'needsPersonnel',
       'amnestics',
     ],
   },
@@ -171,7 +174,7 @@ var ACTIONS = [
       memories: -5,
     },
     attributes: [
-      'requiresPersonnel',
+      'needsPersonnel',
       'misinfo',
     ],
   },
@@ -185,7 +188,6 @@ var ACTIONS = [
     },
     attributes: [
       'taskForce',
-      'agents',
       'personnel',
     ],
   },
@@ -199,7 +201,6 @@ var ACTIONS = [
     },
     attributes: [
       'taskForce',
-      'agents',
       'personnel',
       'amnestics',
       'misinfo',
