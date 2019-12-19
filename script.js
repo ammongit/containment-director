@@ -3,6 +3,10 @@ var context = {
   state: 'intro1',
   anomaly: null,
   attributes: new Set(),
+  costs: {
+    TODO waste, site, memories, records
+    init from anom
+  },
 };
 
 var anomalies = {};
