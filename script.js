@@ -2,11 +2,13 @@
 var context = {
   state: 'intro1',
   anomaly: null,
-  attributes: new Set(),
   costs: {
-    TODO waste, site, memories, records
-    init from anom
+    waste: 0,
+    memories: 0,
+    records: 0,
   },
+  agents: 0,
+  attributes: new Set(),
 };
 
 var anomalies = {};
@@ -84,8 +86,9 @@ function updateReports() {
 function updateActions() {
   var parts = actions.map(function(action) {
     var html = '<button action="runAction(\'' + action.name + '\')"';
+    var enabled = action.enabled === undefined || action.enabled();
 
-    if (!action.enabled || !needsPersonnel(action)) {
+    if (!enabled) {
       html += ' disabled';
     }
 
@@ -95,10 +98,6 @@ function updateActions() {
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
-}
-
-function needsPersonnel(action) {
-  return action.attributes.includes('needsPersonnel') && context.attributes.has('personnel');
 }
 
 function updateRecovery() {
@@ -126,17 +125,19 @@ function clearCurrentAnomaly() {
   var item = context.anomaly.item;
   delete anomalies[item];
   context.anomaly = null;
+  context.costs = {
+    waste: 0,
+    memories: 0,
+    records: 0,
+  };
+  context.agents = 0;
   context.attributes.clear();
 }
 
 function runAction(actionName) {
   var action = findAction(actionName);
 
-  for (var i = 0; i < action.attributes.length; i++) {
-    context.attributes.add(action.attributes[i]);
-  }
-
-  ;
+  // TODO
 }
 
 function findAction(actionName) {
@@ -154,90 +155,57 @@ var ACTIONS = [
     name: 'sendAgents',
     description: 'Send field agents.',
     costs: {
-      site: 5,
       records: 0,
       memories: 5,
     },
-    attributes: [
-      'personnel',
-    ],
+    arguments: [2, 5],
   },
   {
     name: 'quarantine',
     description: 'Quarantine the affected area.',
     costs: {
-      site: 10,
       records: 5,
       memories: 15,
     },
-    attributes: [
-      'needsPersonnel',
-      'quarantine',
-    ],
+    enabled: function() {
+      return context.agents > 0 && !context.attributes.has('quarantine');
+    },
   },
   {
     name: 'amnesticize',
     description: 'Amnesticize affected civilians.',
     functionName: 'actionAmnesticize',
     costs: {
-      site: 10,
       records: -5,
       memories: -20,
     },
-    attributes: [
-      'needsPersonnel',
-      'amnestics',
-    ],
+    enabled: function() {
+      return context.agents > 0 && context.costs.memories >= 5;
+    },
   },
   {
     name: 'misinfo',
     description: 'Disseminate misinformation.',
     costs: {
-      site: 10,
       records: -20,
       memories: -5,
     },
-    attributes: [
-      'needsPersonnel',
-      'misinfo',
-    ],
+    enabled: function() {
+      return context.agents > 0 && context.costs.records >= 5;
+    },
   },
   {
     name: 'sendPi1',
     description: 'Send MTF-Pi-1 ("City Slickers"). Specializes in urban operations.',
     costs: {
-      site: 20,
       records: 0,
       memories: 2,
     },
-    attributes: [
-      'taskForce',
-      'personnel',
-    ],
-  },
-  {
-    name: 'sendGamma5',
-    description: 'Send MTF-Gamma-5 ("Red Herrings"). Specializes in public misinformation and amnestic operations.',
-    costs: {
-      site: 25,
-      records: -100,
-      memories: -100,
-    },
-    attributes: [
-      'taskForce',
-      'personnel',
-      'amnestics',
-      'misinfo',
-    ],
   },
 ];
 
-function setAvailableActions(level, disabled = []) {
+function setAvailableActions(level) {
   actions = ACTIONS.slice(0, level);
-  actions.forEach(function(action) {
-    action.enabled = !disabled.includes(action.name);
-  });
-
   updateActions();
 }
 
@@ -340,54 +308,9 @@ function randomLocation() {
   return randRange(1, 1700) + ' ' + street;
 }
 
-var PREMADE_ANOMALY_ATTRIBUTES = {
-  first: {
-    'artifact': 1,
-    'ectoentropic': 1,
-    'indestructible': 0.2,
-  },
-};
-
-var ANOMALY_ATTRIBUTES = [
-  'artifact',
-  'cognitohazard',
-  'compulsion',
-  'compulsion',
-  'ectoentropic',
-  'extradimensional',
-  'humanoid',
-  'immobile',
-  'indestrubile',
-  'mechanical',
-  'non-euclidean',
-  'ontokinetic',
-  'psychic',
-  'sapient',
-  'sarkic',
-  'spectral',
-  'teleportation',
-  'thaumaturgic',
-];
-
 function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
   var item = generateItemNo();
   var location = randomLocation();
-  var attributes = [];
-
-  var isAnomalous = Math.random() < 0.8;
-
-  if (isAnomalous) {
-    Object
-      .entries(attributeProbabilities)
-      .forEach(function(entry) {
-        var attr = entry[0];
-        var prob = entry[1];
-
-        if (Math.random() < prob) {
-          attributes.push(attr);
-        }
-      });
-  }
 
   var origin = generateOrigin(occurrence, location, origin);
   var anomaly = {
@@ -395,12 +318,11 @@ function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
     location: location,
     tip: origin.tip,
     cleanup: origin.cleanup,
-    attributes: attributes,
-    isAnomalous: isAnomalous,
   };
 
   anomalies[item] = anomaly;
   context.anomaly = anomaly;
+  Object.assign(context.costs, anomaly.cleanup);
   updateReports();
   return anomaly;
 }
