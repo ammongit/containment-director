@@ -205,11 +205,13 @@ function actionQuarantine() {
 
 function containRelocate() {
   appendRecovery('The anomaly has been contained and relocated.');
+  context.attributes.add('contained');
   document.getElementById('btn-designate').removeAttribute('disabled');
 }
 
 function containOnSite() {
   appendRecovery('A provisional containment area has been created at location.');
+  context.attributes.add('contained');
   document.getElementById('btn-designate').removeAttribute('disabled');
 }
 
@@ -361,6 +363,7 @@ var ACTIONS = [
     enabled: function() {
       return (
         context.info > 0 &&
+        !context.anomaly.attributes.includes('contained') &&
         !context.anomaly.attributes.includes('immobile')
       );
     },
@@ -382,6 +385,7 @@ var ACTIONS = [
     enabled: function() {
       return (
         context.info > 0 &&
+        !context.anomaly.attributes.includes('contained') &&
         context.anomaly.attributes.includes('immobile')
       );
     },
