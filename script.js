@@ -155,18 +155,37 @@ function updateActions() {
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
+
+  if (context.attributes.has('contained')) {
+    allowDesignate();
+  }
+
+  if (context.attributes.has('explained')) {
+    allowDismiss();
+  }
 }
 
 function updateRecovery() {
   document.getElementById('recovery').innerHTML = recovery.join('<br>');
 }
 
+function cleanupDone() {
+  return (
+    context.costs.records < 5 &&
+    context.costs.memories < 5
+  );
+}
+
 function allowDesignate() {
-  document.getElementById('btn-designate').removeAttribute('disabled');
+  if (cleanupDone()) {
+    document.getElementById('btn-designate').removeAttribute('disabled');
+  }
 }
 
 function allowDismiss() {
-  document.getElementById('btn-dismiss').removeAttribute('disabled');
+  if (cleanupDone()) {
+    document.getElementById('btn-dismiss').removeAttribute('disabled');
+  }
 }
 
 // Actions
@@ -178,6 +197,7 @@ function investigate() {
       appendRecovery('Agents have determined that the phenomenon did was mundane.');
     }
 
+    context.attributes.add('explained');
     allowDismiss();
   } else if (context.info === 0) {
     if (context.anomaly.attributes.length === 0) {
