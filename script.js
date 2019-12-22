@@ -370,7 +370,7 @@ function randomLocation() {
 
 var BASE_ATTRIBUTE_ANOMALIES = [
   {
-    occurrence: '',
+    occurrence: 'unusual blue slime is leaking',
     attributes: {
     },
   },
@@ -384,16 +384,19 @@ function generateAnomaly() {
   var origin = base.origin || null;
   var attributes = [];
 
-  Object
-    .entries(base.attributes)
-    .forEach(function(entry) {
-      var attr = entry[0];
-      var prob = entry[1];
+  var explained = Math.random() < 0.1;
+  if (!explained) {
+    Object
+      .entries(base.attributes)
+      .forEach(function(entry) {
+        var attr = entry[0];
+        var prob = entry[1];
 
-      if (Math.random() < prob) {
-        attributes.push(attr);
-      }
-    });
+        if (Math.random() < prob) {
+          attributes.push(attr);
+        }
+      });
+  }
 
   var item = generateItemNo();
   var location = randomLocation();
@@ -404,6 +407,7 @@ function generateAnomaly() {
     location: location,
     tip: origin.tip,
     cleanup: origin.cleanup,
+    explained: explained,
   };
 
   anomalies[item] = anomaly;
