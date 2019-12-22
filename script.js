@@ -368,10 +368,146 @@ function randomLocation() {
   return randRange(1, 1700) + ' ' + street;
 }
 
+var ATTRIBUTES = [
+  'animalistic',
+  'areWeCoolYet',
+  'artifact',
+  'artistic',
+  'chaosInsurgency',
+  'ectoentropic',
+  'electrical',
+  'hostile',
+  'hostile',
+  'humanoid',
+  'immobile',
+  'marshallCarterAndDark',
+  'ontokinetic',
+  'online',
+  'sentient',
+  'serpentsHand',
+  'thaumaturgic',
+];
+
 var BASE_ATTRIBUTE_ANOMALIES = [
   {
-    occurrence: 'unusual blue slime is leaking',
+    hint: 'unusual blue slime is leaking',
     attributes: {
+      artifact: 1,
+      ectoentropic: 0.8,
+      sentient: 0.2,
+      humanoid: 0.2,
+    },
+  },
+  {
+    hint: 'a large thaumaturgic emission',
+    origin: ORIGINS.sensors,
+    attributes: {
+      thaumaturgic: 1,
+      artifact: 0.3
+      humanoid: 0.2,
+      serpentsHand: 0.2,
+      ectoentropic: 0.1,
+      immobile: 0.1,
+      hostile: 0.5,
+    },
+  },
+  {
+    hint: 'there is large-scale power outage',
+    origin: ORIGINS.news,
+    attributes: null,
+  },
+  {
+    hint: 'unusual patterns in the electrical grid',
+    attributes: {
+      electrical: 0.8,
+      sentient: 0.3,
+      immobile: 0.1,
+    },
+  },
+  {
+    hint: 'unusual string of murders',
+    origin: ORIGINS.police,
+    attributes: {
+      humanoid: 0.4,
+      thaumaturgic:
+      ontokinetic: 0.1,
+    },
+  },
+  {
+    hint: 'activity from the Chaos Insurgency',
+    attributes: null,
+  },
+  {
+    hint: 'two-headed deer',
+    attributes: {
+      alive: 1,
+      animalistic: 1,
+      hostile: 0.4,
+    },
+  },
+  {
+    hint: 'seizures resulting from exposure to an internet video',
+    attributes: {
+      online: 1,
+      cognitohazard: 0.9,
+      electrical: 0.2,
+      chaosInsurgency: 0.1,
+    },
+  },
+  {
+    hint: 'levitating arc of water',
+    attributes: null,
+  }
+  {
+    hint: 'graffiti materializing on building walls',
+    attributes: {
+      ectoentropic: 0.2,
+      sentient: 0.4,
+      hostile: 0.1,
+    },
+  },
+  {
+    hint: '"demonic sounds" coming from the streets',
+    attributes: {
+      sentient: 0.4,
+      humanoid: 0.3,
+      hostile: 0.8,
+    },
+  },
+  {
+    hint: 'sudden appearance of patches of flowers',
+    attributes: {
+      ontokinetic: 0.2,
+      ectoentropic: 0.2,
+    },
+  },
+  {
+    hint: 'report bank accounts charging for "SUPERGUMP"',
+    attributes: null,
+  }
+  {
+    hint: 'stores selling products with the manufacturer "dado"',
+    attributes: {
+      artifact: 1,
+    },
+  },
+  {
+    hint: 'patterns similar to an anomalous narcotic',
+    attributes: {
+      cognitohazard: 1,
+      artifact: 1,
+    },
+  },
+  {
+    hint: 'boiled eggs are appearing',
+    attributes: null,
+  },
+  {
+    hint: 'dancing glass dolls',
+    attributes: {
+      humanoid: 1,
+      sentient: 0.3,
+      hostile: 0.4,
     },
   },
 ];
@@ -379,29 +515,52 @@ var BASE_ATTRIBUTE_ANOMALIES = [
 shuffle(BASE_ATTRIBUTE_ANOMALIES);
 
 function generateAnomaly() {
-  var base = randElement(BASE_ATTRIBUTE_ANOMALIES);
-  var occurrence = base.occurrence;
+  var base = BASE_ATTRIBUTE_ANOMALIES[context.finished];
+  if (base === undefined) {
+    base = randElement(BASE_ATTRIBUTE_ANOMALIES);
+  }
+
+  var hint = base.hint;
   var origin = base.origin || null;
   var attributes = [];
 
   var explained = Math.random() < 0.1;
   if (!explained) {
-    Object
-      .entries(base.attributes)
-      .forEach(function(entry) {
-        var attr = entry[0];
-        var prob = entry[1];
+    if (base.attributes === null) {
+      // Add random attributes
+      var lengthProbabilities = {
+        0: 0.10,
+        1: 0.08,
+        2: 0.05,
+        3: 0.03,
+      };
+
+      ATTRIBUTES.forEach(function(attr) {
+        var prob = lengthProbabilities[attributes.length] || 0.01;
 
         if (Math.random() < prob) {
           attributes.push(attr);
         }
       });
+    } else {
+      // Add attributes from base
+      Object
+        .entries(base.attributes)
+        .forEach(function(entry) {
+          var attr = entry[0];
+          var prob = entry[1];
+
+          if (Math.random() < prob) {
+            attributes.push(attr);
+          }
+        });
+    }
   }
 
   var item = generateItemNo();
   var location = randomLocation();
 
-  var origin = generateOrigin(occurrence, location, origin);
+  var origin = generateOrigin(hint, location, origin);
   var anomaly = {
     number: item,
     location: location,
