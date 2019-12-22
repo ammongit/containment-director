@@ -295,7 +295,7 @@ function sendPi1() {
 function designate() {
   appendRecovery(context.anomaly.number + ' has been preliminarily contained, and an SCP designation has been requested.');
 
-  updateCapital(40);
+  updateCapital(50);
   clearCurrentAnomaly();
 
   if (context.state === 'command-fourth') {
@@ -359,6 +359,8 @@ function clearCurrentAnomaly() {
 
     setActiveAnomaly(randElement(anomalies));
   }
+
+  updateActions();
 }
 
 function runAction(actionName) {
@@ -868,7 +870,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
     },
   },
   {
-    hint: 'unusual sounds are heard',
+    hint: 'unusual sounds are being heard',
     attributes: null,
   },
   {
@@ -880,7 +882,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
     },
   },
   {
-    hint: 'levitating saucers',
+    hint: 'levitating cutlery',
     attributes: {
       incorporeal: 0.8,
       artifact: 0.2,
