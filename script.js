@@ -1,7 +1,7 @@
 // State variables
 var context = {
   state: 'intro1',
-  capital: 100,
+  capital: 50,
   gotEnding: false,
   finished: 0,
   anomaly: null,
@@ -268,7 +268,7 @@ function clearCurrentAnomaly() {
   context.attributes.clear();
 
   if (!context.gotEnding) {
-    if (context.finished > 50 || context.capital > 500) {
+    if (context.finished > 50 || context.capital > 200) {
       document.getElementById('command').style = 'display: none';
       document.getElementById('finished').style = '';
       document.getElementById('finished-count').innerHTML = String(context.finished);
