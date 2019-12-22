@@ -1,6 +1,7 @@
 // State variables
 var context = {
   state: 'intro1',
+  capital: 100,
   anomaly: null,
   costs: {
     waste: 0,
@@ -12,7 +13,6 @@ var context = {
 };
 
 var anomalies = {};
-var actions = [];
 var recovery = [];
 
 // States or actions
@@ -34,24 +34,15 @@ function commandFirst() {
     ORIGINS.eyewitness,
   );
 
-  // TODO set actions
-
   setNotice([
     '<p>The currently active report, ' + anomaly.number + ', is bold.',
     'We should send some field agents to investigate.</p>',
   ]);
-
-  setAvailableActions(1);
 }
 
 // Column state
 function setNotice(parts) {
   document.getElementById('notice').innerHTML = parts.join(' ');
-}
-
-function addAction(action) {
-  actions.push(action);
-  updateActions();
 }
 
 function appendRecovery(entry) {
@@ -84,7 +75,8 @@ function updateReports() {
 }
 
 function updateActions() {
-  var parts = actions.map(function(action) {
+  // TODO multiple calls
+  var parts = ACTIONS.map(function(action) {
     var html = '<button action="runAction(\'' + action.name + '\')"';
     var enabled = action.enabled === undefined || action.enabled();
 
@@ -110,6 +102,7 @@ function designate() {
 
   // TODO
 
+  context.capital += 40;
   clearCurrentAnomaly();
 }
 
@@ -118,6 +111,7 @@ function dismiss() {
 
   // TODO
 
+  context.capital += 30;
   clearCurrentAnomaly();
 }
 
@@ -203,11 +197,6 @@ var ACTIONS = [
     },
   },
 ];
-
-function setAvailableActions(level) {
-  actions = ACTIONS.slice(0, level);
-  updateActions();
-}
 
 // Anomalies
 var STREETS = [
