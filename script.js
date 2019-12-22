@@ -386,6 +386,7 @@ var ATTRIBUTES = [
   'sentient',
   'serpentsHand',
   'thaumaturgic',
+  'incorporeal',
 ];
 
 var BASE_ATTRIBUTE_ANOMALIES = [
@@ -403,7 +404,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
     origin: ORIGINS.sensors,
     attributes: {
       thaumaturgic: 1,
-      artifact: 0.3
+      artifact: 0.3,
       humanoid: 0.2,
       serpentsHand: 0.2,
       ectoentropic: 0.1,
@@ -429,7 +430,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
     origin: ORIGINS.police,
     attributes: {
       humanoid: 0.4,
-      thaumaturgic:
+      thaumaturgic: 0.3,
       ontokinetic: 0.1,
     },
   },
@@ -457,7 +458,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
   {
     hint: 'levitating arc of water',
     attributes: null,
-  }
+  },
   {
     hint: 'graffiti materializing on building walls',
     attributes: {
@@ -484,7 +485,7 @@ var BASE_ATTRIBUTE_ANOMALIES = [
   {
     hint: 'report bank accounts charging for "SUPERGUMP"',
     attributes: null,
-  }
+  },
   {
     hint: 'stores selling products with the manufacturer "dado"',
     attributes: {
@@ -508,6 +509,27 @@ var BASE_ATTRIBUTE_ANOMALIES = [
       humanoid: 1,
       sentient: 0.3,
       hostile: 0.4,
+    },
+  },
+  {
+    hint: 'unusual sounds are heard',
+    attributes: null,
+  },
+  {
+    hint: 'a building is no longer perceptible',
+    attributes: {
+      immobile: 1,
+      sentient: 0.1,
+      marshallCarterAndDark: 0.2,
+    },
+  },
+  {
+    hint: 'levitating saucers',
+    attributes: {
+      incorporeal: 0.8,
+      artifact: 0.2,
+      humanoid: 0.2,
+      sentient: 0.3,
     },
   },
 ];
