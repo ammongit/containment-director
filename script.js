@@ -395,7 +395,11 @@ var ACTIONS = [
       memories: 15,
     },
     enabled: function() {
-      return context.agents > 0 && !context.attributes.has('quarantine');
+      return (
+        context.agents > 0 &&
+        !context.attributes.has('contained') &&
+        !context.attributes.has('quarantine')
+      );
     },
     buttons: [
       {
@@ -415,7 +419,7 @@ var ACTIONS = [
     enabled: function() {
       return (
         context.info > 0 &&
-        !context.anomaly.attributes.includes('contained') &&
+        !context.attributes.has('contained') &&
         !context.anomaly.attributes.includes('immobile')
       );
     },
@@ -437,7 +441,7 @@ var ACTIONS = [
     enabled: function() {
       return (
         context.info > 0 &&
-        !context.anomaly.attributes.includes('contained') &&
+        !context.attributes.has('contained') &&
         context.anomaly.attributes.includes('immobile')
       );
     },
