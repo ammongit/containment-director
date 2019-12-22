@@ -368,8 +368,33 @@ function randomLocation() {
   return randRange(1, 1700) + ' ' + street;
 }
 
-function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
-  // TODO
+var BASE_ATTRIBUTE_ANOMALIES = [
+  {
+    occurrence: '',
+    attributes: {
+    },
+  },
+];
+
+shuffle(BASE_ATTRIBUTE_ANOMALIES);
+
+function generateAnomaly() {
+  var base = randElement(BASE_ATTRIBUTE_ANOMALIES);
+  var occurrence = base.occurrence;
+  var origin = base.origin || null;
+  var attributes = [];
+
+  Object
+    .entries(base.attributes)
+    .forEach(function(entry) {
+      var attr = entry[0];
+      var prob = entry[1];
+
+      if (Math.random() < prob) {
+        attributes.push(attr);
+      }
+    });
+
   var item = generateItemNo();
   var location = randomLocation();
 
