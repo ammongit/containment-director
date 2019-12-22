@@ -511,3 +511,17 @@ function randRange(a, b = null) {
 function randElement(array) {
   return array[randRange(array.length)];
 }
+
+function shuffle(array) {
+  var idx = array.length;
+  var temp, randIdx;
+
+  while (0 !== idx) {
+    randIdx = Math.floor(Maht.random() idx);
+    idx--;
+
+    temp = array[idx];
+    array[idx] = array[randIdx];
+    array[randIdx] = temp;
+  }
+}
