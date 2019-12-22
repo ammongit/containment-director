@@ -33,11 +33,27 @@ function commandFirst() {
 
   setNotice([
     '<p>The currently active report, ' + anomaly.number + ', is bolded.',
-    'We should send some field agents to investigate.</p>',
+    'We should send some field agents to the location.</p>',
   ]);
 
   updateActions();
   updateCapital();
+}
+
+function commandSecond() {
+  context.state = 'command-second';
+
+  setNotice([
+    '<p>Now that we have personnel on-site, we should investigate.</p>',
+  ]);
+}
+
+function commandThird() {
+  context.state = 'command-third';
+
+  // TODO
+  setNotice([
+  ]);
 }
 
 function continueFinished() {
@@ -71,7 +87,7 @@ function updateReports() {
         html = '<b>' + html + '</b>';
       }
 
-      html += ' ' + anomaly.tip;
+      html += ' ' + anomaly.tip + '.';
 
       return '<p>' + html + '</p>';
     });
@@ -114,15 +130,15 @@ function updateActions() {
       parts.push('<button onclick="');
       parts.push('updateCosts(' + action.costs.records + ', ' + action.costs.memories + ');');
       parts.push('updateCapital(-' + button.capitalCost + ');');
-      parts.push(button.execute);
+      parts.push(button.execute + ';');
+      parts.push('updateActions();');
       parts.push('" ');
 
       var enabled = (
         action.enabled === undefined || (
-          action.enabled() && button.capitalCost > context.capital
+          action.enabled() && button.capitalCost <= context.capital
         )
       );
-
       if (!enabled) {
         parts.push(' disabled');
       }
@@ -156,6 +172,10 @@ function sendAgents(count) {
   appendRecovery(num + ' field agents were dispatched to ' + context.anomaly.location + '.');
 
   context.agents += count;
+
+  if (context.state === 'command-first') {
+    commandSecond();
+  }
 }
 
 function designate() {
