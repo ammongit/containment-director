@@ -143,6 +143,13 @@ function dismiss() {
 function clearCurrentAnomaly() {
   context.finished += 1;
 
+  if (context.finished === 10) {
+    setNotice([
+      '<p>The Site Director has approved the deployment of MTF-Pi-1 ("City Slickers").</p>',
+      '<p>They are often busy and should be used only when needed.</p>',
+    ]);
+  }
+
   var item = context.anomaly.item;
   delete anomalies[item];
   context.anomaly = null;
@@ -181,6 +188,19 @@ function findAction(actionName) {
 }
 
 var ACTIONS = [
+  {
+    name: 'investigate',
+    description: 'Investigate.',
+    costs: {
+      records: 0,
+      memories: 2,
+    },
+    buttons: [
+      {
+        label: '>',
+      },
+    ],
+  },
   {
     name: 'sendAgents',
     description: 'Send field agents.',
@@ -232,7 +252,7 @@ var ACTIONS = [
     },
     buttons: [
       {
-        label: '',
+        label: '>>',
         capitalCost: 2,
         execute: 'actionAmnesticize()',
       },
@@ -250,7 +270,7 @@ var ACTIONS = [
     },
     buttons: [
       {
-        label: '',
+        label: '>>',
         capitalCost: 2,
         execute: 'actionMisinfo()',
       },
@@ -266,6 +286,13 @@ var ACTIONS = [
     enabled: function() {
       return context.finished > 10;
     },
+    buttons: [
+      {
+        label: '>>>',
+        capitalCost: 25,
+        execute: 'sendMtf()',
+      },
+    ],
   },
 ];
 
