@@ -33,9 +33,11 @@ function commandFirst() {
   var anomaly = generateAnomaly();
 
   setNotice([
-    '<p>The currently active report, ' + anomaly.number + ', is bold.',
+    '<p>The currently active report, ' + anomaly.number + ', is bolded.',
     'We should send some field agents to investigate.</p>',
   ]);
+
+  updateActions();
 }
 
 function continueFinished() {
@@ -93,10 +95,16 @@ function updateCapital(value) {
 function updateActions() {
   // TODO multiple calls
   var parts = ACTIONS.map(function(action) {
-    var parts = [];
+    var parts = [
+      '<p>',
+      action.description,
+      '<span class="button-container">',
+    ];
 
     action.buttons.forEach(function(button) {
-      var html = '<button action="' + button.execute + '" ';
+      parts.push('<button action="');
+      parts.push(button.execute);
+      parts.push('" ');
       var enabled = (
         action.enabled === undefined || (
           action.enabled() && button.capitalCost > context.capital
@@ -104,14 +112,17 @@ function updateActions() {
       );
 
       if (!enabled) {
-        html += ' disabled';
+        parts.push(' disabled');
       }
 
-      html += '>' + button.label + '</button>' + action.description;
-      parts.push('<p>' + html + '</p>');
+      parts.push('>');
+      parts.push(button.label);
+      parts.push('</button>');
     });
 
-    return ''.join(parts);
+    parts.push('</span></p>');
+
+    return parts.join('');
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
@@ -190,7 +201,7 @@ function findAction(actionName) {
 var ACTIONS = [
   {
     name: 'investigate',
-    description: 'Investigate.',
+    description: 'Investigate',
     costs: {
       records: 0,
       memories: 2,
@@ -203,7 +214,7 @@ var ACTIONS = [
   },
   {
     name: 'sendAgents',
-    description: 'Send field agents.',
+    description: 'Send field agents',
     costs: {
       records: 0,
       memories: 5,
@@ -223,7 +234,7 @@ var ACTIONS = [
   },
   {
     name: 'quarantine',
-    description: 'Quarantine the affected area.',
+    description: 'Quarantine the affected area',
     costs: {
       records: 5,
       memories: 15,
@@ -260,7 +271,7 @@ var ACTIONS = [
   },
   {
     name: 'misinfo',
-    description: 'Disseminate misinformation.',
+    description: 'Disseminate misinformation',
     costs: {
       records: -20,
       memories: -5,
@@ -278,7 +289,7 @@ var ACTIONS = [
   },
   {
     name: 'sendPi1',
-    description: 'Send MTF-Pi-1 ("City Slickers"). Specializes in urban operations.',
+    description: 'Send MTF-Pi-1 ("City Slickers")',
     costs: {
       records: 0,
       memories: 2,

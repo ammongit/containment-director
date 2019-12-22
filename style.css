@@ -252,8 +252,17 @@ body {
     margin: 0.75em;
 }
 
-#actions button {
+#actions p {
+    display: flex;
+}
+
+#actions .button-container {
+    margin-left: auto;
     margin-right: 0.5em;
+}
+
+#actions button {
+    margin-left: 0.5em;
 }
 
 .button-row {
