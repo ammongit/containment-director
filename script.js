@@ -4,6 +4,9 @@ var context = {
   capital: 50,
   gotEnding: false,
   finished: 0,
+  anomalies: {},
+  recovery: [],
+
   anomaly: null,
   costs: {
     records: 0,
@@ -12,8 +15,6 @@ var context = {
   agents: 0,
   info: 0,
   attributes: new Set(),
-  anomalies: {},
-  recovery: [],
 };
 
 // States or actions
@@ -327,7 +328,6 @@ function clearCurrentAnomaly() {
   delete context.anomalies[number];
   context.anomaly = null;
   context.costs = {
-    waste: 0,
     memories: 0,
     records: 0,
   };
@@ -346,14 +346,19 @@ function clearCurrentAnomaly() {
 
   disableDesignateDismiss();
 
-  // Generate new anomalies
-  var anomalies = [];
-  var count = randRange(1, 4);
-  for (var i = 0; i < count; i++) {
-    anomalies.push(generateAnomaly());
-  }
+  if (Object.keys(context.anomalies).length > 5) {
+    setActiveAnomaly(context.anomalies[0]);
+  } else {
+    // Generate new anomalies
 
-  setActiveAnomaly(randElement(anomalies));
+    var anomalies = [];
+    var count = randRange(1, 3);
+    for (var i = 0; i < count; i++) {
+      anomalies.push(generateAnomaly());
+    }
+
+    setActiveAnomaly(randElement(anomalies));
+  }
 }
 
 function runAction(actionName) {
@@ -444,6 +449,7 @@ var ACTIONS = [
       return (
         context.info > 0 &&
         !context.attributes.has('contained') &&
+        !context.attributes.has('explained') &&
         !context.anomaly.attributes.includes('immobile')
       );
     },
@@ -466,6 +472,7 @@ var ACTIONS = [
       return (
         context.info > 0 &&
         !context.attributes.has('contained') &&
+        !context.attributes.has('explained') &&
         context.anomaly.attributes.includes('immobile')
       );
     },
@@ -883,13 +890,8 @@ var BASE_ATTRIBUTE_ANOMALIES = [
   },
 ];
 
-shuffle(BASE_ATTRIBUTE_ANOMALIES);
-
 function generateAnomaly() {
-  var base = BASE_ATTRIBUTE_ANOMALIES[context.finished];
-  if (base === undefined) {
-    base = randElement(BASE_ATTRIBUTE_ANOMALIES);
-  }
+  var base = randElement(BASE_ATTRIBUTE_ANOMALIES);
 
   var hint = base.hint;
   var origin = base.origin || null;
