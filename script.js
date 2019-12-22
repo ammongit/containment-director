@@ -10,6 +10,7 @@ var context = {
     memories: 0,
   },
   agents: 0,
+  info: 0,
   attributes: new Set(),
 };
 
@@ -164,6 +165,8 @@ function updateRecovery() {
 function investigate() {
   appendRecovery('Agents on-site are investigating lead ' + context.anomaly.number + '.');
 
+
+
   if (context.state === 'command-second') {
     commandThird();
   }
@@ -217,6 +220,7 @@ function clearCurrentAnomaly() {
     records: 0,
   };
   context.agents = 0;
+  context.info = 0;
   context.attributes.clear();
 
   if (!context.gotEnding) {
@@ -579,26 +583,25 @@ function generateOrigin(occurrence, location, origin = null) {
   };
 }
 
-var ATTRIBUTES = [
-  'animalistic',
-  'areWeCoolYet',
-  'artifact',
-  'artistic',
-  'chaosInsurgency',
-  'ectoentropic',
-  'electrical',
-  'hostile',
-  'hostile',
-  'humanoid',
-  'immobile',
-  'marshallCarterAndDark',
-  'ontokinetic',
-  'online',
-  'sentient',
-  'serpentsHand',
-  'thaumaturgic',
-  'incorporeal',
-];
+var ATTRIBUTES = {
+  animalistic: 'an animal',
+  areWeCoolYet: 'tied to art collective AWCY?',
+  artifact: 'a man-made artifact',
+  artistic: 'an art piece',
+  chaosInsurgency: 'the work of the Chaos Insurgency',
+  ectoentropic: 'an ectoentropic anomaly',
+  electrical: 'have electrical properties',
+  hostile: 'is hostile towards personnel',
+  humanoid: 'is humanoid',
+  immobile: 'cannot be feasibly moved',
+  marshallCarterAndDark: 'the property of Marshall, Carter, and Dark Ltd.',
+  ontokinetic: 'a reality-bending anomaly',
+  online: 'internet-based',
+  sentient: 'sentient',
+  serpentsHand: 'tied to the Serpent\'s Hand',
+  thaumaturgic: 'thaumaturgic in nature',
+  incorporeal: 'an incorporeal entity',
+};
 
 var BASE_ATTRIBUTE_ANOMALIES = [
   {
@@ -768,13 +771,15 @@ function generateAnomaly() {
         3: 0.03,
       };
 
-      ATTRIBUTES.forEach(function(attr) {
-        var prob = lengthProbabilities[attributes.length] || 0.01;
+      Object
+        .keys(ATTRIBUTES)
+        .forEach(function(attr) {
+          var prob = lengthProbabilities[attributes.length] || 0.01;
 
-        if (Math.random() < prob) {
-          attributes.push(attr);
-        }
-      });
+          if (Math.random() < prob) {
+            attributes.push(attr);
+          }
+        });
     } else {
       // Add attributes from base
       Object
