@@ -74,6 +74,17 @@ function updateReports() {
   document.getElementById('reports').innerHTML = parts.join('');
 }
 
+function updateCapital(value) {
+  context.capital += value;
+
+  document.getElementById('capital').innerHTML = String(context.capital);
+
+  if (context.capital < 5) {
+    document.getElementById('command').style = 'display: none';
+    document.getElementById('fired').style = '';
+  }
+}
+
 function updateActions() {
   // TODO multiple calls
   var parts = ACTIONS.map(function(action) {
@@ -102,7 +113,7 @@ function designate() {
 
   // TODO
 
-  context.capital += 40;
+  updateCapital(40);
   clearCurrentAnomaly();
 }
 
@@ -111,7 +122,7 @@ function dismiss() {
 
   // TODO
 
-  context.capital += 30;
+  updateCapital(40);
   clearCurrentAnomaly();
 }
 
@@ -152,7 +163,22 @@ var ACTIONS = [
       records: 0,
       memories: 5,
     },
-    arguments: [2, 5],
+    buttons: [
+      {
+        label: '2',
+        capitalCost: 2,
+        run: function() {
+          sendAgents(2);
+        },
+      },
+      {
+        label: '5',
+        capitalCost: 5,
+        run: function() {
+          sendAgents(5);
+        },
+      },
+    ],
   },
   {
     name: 'quarantine',
@@ -164,6 +190,8 @@ var ACTIONS = [
     enabled: function() {
       return context.agents > 0 && !context.attributes.has('quarantine');
     },
+    buttons: [
+    ],
   },
   {
     name: 'amnesticize',

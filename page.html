@@ -29,16 +29,24 @@
 
 <div id="intro2" style="display: none">
   <p>
-    As part of your job, you will receive potential anomaly reports (PARs).
-    These may be anomalous objects, people, events, or false positives.
+    As part of your job, you will receive potential anomaly reports (PARs). These may be anomalous objects, people, events, or false positives.
   </p>
 
   <p>
-    You will investigate one at a time, marking it as complete by either dismissing the report
-    or requesting an SCP designation.
+    You will investigate one at a time, marking it as complete by either dismissing the report or requesting an SCP designation.
   </p>
 
   <button class="align-right" onclick="commandFirst()">Next</button>
+</div>
+
+<div id="fired" style="display: none">
+  <p>
+    You were too careless with how you requested resources, or annoyed the wrong people one too many times and were fired.
+  </p>
+
+  <p>
+    Don't worry about how much the amnestics hurt, you won't remember any of it.
+  </p>
 </div>
 
 <div id="command" style="display: none">
@@ -66,6 +74,10 @@
 
   <div class="command-column">
     <h4>Actions</h4>
+
+    <div class="capital">
+      <b>Capital:</b> <span id="capital">100</span>
+    </div>
 
     <div class="command-column-contents" id="actions"></div>
   </div>
