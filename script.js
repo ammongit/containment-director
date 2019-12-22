@@ -161,6 +161,14 @@ function updateRecovery() {
   document.getElementById('recovery').innerHTML = recovery.join('<br>');
 }
 
+function allowDesignate() {
+  document.getElementById('btn-designate').removeAttribute('disabled');
+}
+
+function allowDismiss() {
+  document.getElementById('btn-dismiss').removeAttribute('disabled');
+}
+
 // Actions
 function investigate() {
   if (context.anomaly.explained) {
@@ -170,7 +178,7 @@ function investigate() {
       appendRecovery('Agents have determined that the phenomenon did was mundane.');
     }
 
-    document.getElementById('btn-dismiss').removeAttribute('disabled');
+    allowDismiss();
   } else if (context.info === 0) {
     if (context.anomaly.attributes.length === 0) {
       appendRecovery('Agents are determining the properties of the anomaly.');
@@ -206,13 +214,13 @@ function actionQuarantine() {
 function containRelocate() {
   appendRecovery('The anomaly has been contained and relocated.');
   context.attributes.add('contained');
-  document.getElementById('btn-designate').removeAttribute('disabled');
+  allowDesignate();
 }
 
 function containOnSite() {
   appendRecovery('A provisional containment area has been created at location.');
   context.attributes.add('contained');
-  document.getElementById('btn-designate').removeAttribute('disabled');
+  allowDesignate();
 }
 
 function actionAmnesticize() {
