@@ -162,9 +162,11 @@ function updateRecovery() {
 
 // Actions
 function investigate() {
-  appendRecovery('Agents on-site are investigating lead ' + context.anomaly.item + '.');
+  appendRecovery('Agents on-site are investigating lead ' + context.anomaly.number + '.');
 
-  // TODO
+  if (context.state === 'command-second') {
+    commandThird();
+  }
 }
 
 function sendAgents(count) {
@@ -179,7 +181,7 @@ function sendAgents(count) {
 }
 
 function designate() {
-  appendRecovery(context.anomaly.item + ' has been preliminarily contained, and an SCP designation has been requested.');
+  appendRecovery(context.anomaly.number + ' has been preliminarily contained, and an SCP designation has been requested.');
 
   // TODO
 
@@ -188,7 +190,7 @@ function designate() {
 }
 
 function dismiss() {
-  appendRecovery(context.anomaly.item + ' has been dismissed as resolved or non-anomalous.');
+  appendRecovery(context.anomaly.number + ' has been dismissed as resolved or non-anomalous.');
 
   // TODO
 
@@ -206,8 +208,8 @@ function clearCurrentAnomaly() {
     ]);
   }
 
-  var item = context.anomaly.item;
-  delete anomalies[item];
+  var number = context.anomaly.number;
+  delete anomalies[number];
   context.anomaly = null;
   context.costs = {
     waste: 0,
@@ -788,19 +790,19 @@ function generateAnomaly() {
     }
   }
 
-  var item = generateItemNo();
+  var number = generateItemNo();
   var location = randomLocation();
 
   var origin = generateOrigin(hint, location, origin);
   var anomaly = {
-    number: item,
+    number: number,
     location: location,
     tip: origin.tip,
     cleanup: origin.cleanup,
     explained: explained,
   };
 
-  anomalies[item] = anomaly;
+  anomalies[number] = anomaly;
   context.anomaly = anomaly;
   Object.assign(context.costs, anomaly.cleanup);
   updateReports();
