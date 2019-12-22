@@ -62,7 +62,7 @@ function commandFourth() {
 
   setNotice([
     '<p>Now that the anomaly has been contained or explained,',
-    'it is time to clean-up the scene and administer amnestics.</p>',
+    'it is time to clean up the scene and administer amnestics.</p>',
   ]);
 }
 
@@ -71,8 +71,7 @@ function commandRest() {
 
   setNotice([
     '<p>Your first PAR has been handled!',
-    'Congrats, you are all set to triage new reports ',
-    'and help maintain normalcy.</p>',
+    'You are all set to receive and process new reports.</p>',
   ]);
 }
 
@@ -290,6 +289,10 @@ function designate() {
 
   updateCapital(40);
   clearCurrentAnomaly();
+
+  if (context.state === 'command-fourth') {
+    commandRest();
+  }
 }
 
 function dismiss() {
@@ -297,6 +300,10 @@ function dismiss() {
 
   updateCapital(40);
   clearCurrentAnomaly();
+
+  if (context.state === 'command-fourth') {
+    commandRest();
+  }
 }
 
 function clearCurrentAnomaly() {
@@ -938,6 +945,7 @@ function generateAnomaly() {
 function setActiveAnomaly(anomaly) {
   context.anomaly = anomaly;
   Object.assign(context.costs, anomaly.cleanup);
+  updateReports();
 }
 
 function generateItemNo() {
