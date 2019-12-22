@@ -52,8 +52,8 @@ function commandSecond() {
 function commandThird() {
   context.state = 'command-third';
 
-  // TODO
   setNotice([
+    '<p>Your agents should have enough information now to attempt containment.</p>',
   ]);
 }
 
@@ -163,9 +163,24 @@ function updateRecovery() {
 
 // Actions
 function investigate() {
-  appendRecovery('Agents on-site are investigating lead ' + context.anomaly.number + '.');
+  if (context.anomaly.explained) {
+    if (randRange(2)) {
+      appendRecovery('Agents have determined that the phenomenon did not occur.');
+    } else {
+      appendRecovery('Agents have determined that the phenomenon did was mundane.');
+    }
 
+    document.getElementById('btn-dismiss').removeAttribute('disabled');
+  } else if (context.info === 0) {
+    if (context.anomaly.attributes.length === 0) {
+      appendRecovery('Agents are determining the properties of the anomaly.');
+    } else {
+      var attr = randElement(context.anomaly.attributes);
+      appendRecovery('Agents on-site report that ' + context.anomaly.number + ' is ' + ATTRIBUTES[attr] + '.');
+    }
+  }
 
+  context.info++;
 
   if (context.state === 'command-second') {
     commandThird();
@@ -183,6 +198,35 @@ function sendAgents(count) {
   }
 }
 
+function actionQuarantine() {
+  appendRecovery('Agents have cordorned off an area around the anomaly.');
+  context.attributes.add('quarantine');
+}
+
+function containRelocate() {
+  appendRecovery('The anomaly has been contained and relocated.');
+  document.getElementById('btn-designate').removeAttribute('disabled');
+}
+
+function containOnSite() {
+  appendRecovery('A provisional containment area has been created at location.');
+  document.getElementById('btn-designate').removeAttribute('disabled');
+}
+
+function actionAmnesticize() {
+  appendRecovery('Witnesses in the area have been administered Class-A amnestics.');
+}
+
+function actionMisinfo() {
+  appendRecovery('Misinformation Department workers have begun cover-up operations.');
+}
+
+function sendPi1() {
+  appendRecovery('Mobile Task Force Pi-1 ("City Slickers") has been deployed to ' + context.anomaly.location + '.');
+
+  context.agents += 8;
+}
+
 function designate() {
   appendRecovery(context.anomaly.number + ' has been preliminarily contained, and an SCP designation has been requested.');
 
@@ -194,8 +238,6 @@ function designate() {
 
 function dismiss() {
   appendRecovery(context.anomaly.number + ' has been dismissed as resolved or non-anomalous.');
-
-  // TODO
 
   updateCapital(40);
   clearCurrentAnomaly();
@@ -231,6 +273,9 @@ function clearCurrentAnomaly() {
       context.gotEnding = true;
     }
   }
+
+  document.getElementById('btn-designate').setAttribute('disabled', '');
+  document.getElementById('btn-dismiss').setAttribute('disabled', '');
 }
 
 function runAction(actionName) {
@@ -314,7 +359,10 @@ var ACTIONS = [
       memories: 5,
     },
     enabled: function() {
-      // TODO
+      return (
+        context.info > 0 &&
+        !context.anomaly.attributes.includes('immobile')
+      );
     },
     buttons: [
       {
@@ -332,7 +380,10 @@ var ACTIONS = [
       memories: 5,
     },
     enabled: function() {
-      // TODO
+      return (
+        context.info > 0 &&
+        context.anomaly.attributes.includes('immobile')
+      );
     },
     buttons: [
       {
@@ -584,7 +635,7 @@ function generateOrigin(occurrence, location, origin = null) {
 }
 
 var ATTRIBUTES = {
-  animalistic: 'an animal',
+  animalistic: 'an anomalous animal',
   areWeCoolYet: 'tied to art collective AWCY?',
   artifact: 'a man-made artifact',
   artistic: 'an art piece',
@@ -804,6 +855,7 @@ function generateAnomaly() {
     location: location,
     tip: origin.tip,
     cleanup: origin.cleanup,
+    attributes: attributes,
     explained: explained,
   };
 
