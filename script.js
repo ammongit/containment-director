@@ -95,6 +95,11 @@ function updateCapital(value) {
 function updateActions() {
   // TODO multiple calls
   var parts = ACTIONS.map(function(action) {
+    var visible = action.visible === undefined || action.visible();
+    if (!visible) {
+      return '';
+    }
+
     var parts = [
       '<p>',
       action.description,
@@ -105,6 +110,7 @@ function updateActions() {
       parts.push('<button action="');
       parts.push(button.execute);
       parts.push('" ');
+
       var enabled = (
         action.enabled === undefined || (
           action.enabled() && button.capitalCost > context.capital
@@ -252,7 +258,7 @@ var ACTIONS = [
   },
   {
     name: 'amnesticize',
-    description: 'Amnesticize affected civilians.',
+    description: 'Amnesticize affected civilians',
     functionName: 'actionAmnesticize',
     costs: {
       records: -5,
@@ -294,7 +300,7 @@ var ACTIONS = [
       records: 0,
       memories: 2,
     },
-    enabled: function() {
+    visible: function() {
       return context.finished > 10;
     },
     buttons: [
