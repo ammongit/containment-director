@@ -208,6 +208,8 @@ function clearCurrentAnomaly() {
     ]);
   }
 
+  var number = context.anomaly.number;
+  delete anomalies[number];
   context.anomaly = null;
   context.costs = {
     waste: 0,
