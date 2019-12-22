@@ -395,6 +395,91 @@ function randomLocation() {
   return randRange(1, 1700) + ' ' + street;
 }
 
+var ORIGINS = {
+  rumors: {
+    tip: 'Rumors are circulating of %OCCURRENCE% near %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [0, 15],
+      memories: [2, 12],
+    },
+  },
+  eyewitness: {
+    tip: 'Eyewitnesses report %OCCURRENCE% nearby %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [0, 20],
+      memories: [4, 16],
+    },
+  },
+  socialMedia: {
+    tip: 'Social media reports suggest %OCCURRENCE% at %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [10, 40],
+      memories: [8, 25],
+    },
+  },
+  police: {
+    tip: 'Police communications suggest %OCCURRENCE% at %LOCATION%',
+    cleanup: {
+      waste: [0, 30],
+      records: [5, 10],
+      memories: [4, 12],
+    },
+  },
+  news: {
+    tip: 'Local news report says %OCCURRENCE% nearby %LOCATION%',
+    cleanup: {
+      waste: [10, 30],
+      records: [15, 40],
+      memories: [20, 50],
+    },
+  },
+  sensors: {
+    tip: 'Foundation sensors detect %OCCURRENCE% around the area of %LOCATION%',
+    cleanup: {
+      waste: [20, 60],
+      records: [0, 20],
+      memories: [0, 20],
+    },
+  },
+  surveillance: {
+    tip: 'Foundation surveillance detects %OCCURRENCE% around the area of %LOCATION%',
+    cleanup: {
+      waste: [0, 60],
+      records: [0, 40],
+      memories: [0, 40],
+    },
+  },
+};
+
+function generateOrigin(occurrence, location, origin = null) {
+  if (origin === null) {
+    origin = randElement(Object.values(ORIGINS));
+  }
+
+  var tip = origin.tip
+    .replace('%OCCURRENCE%', occurrence)
+    .replace('%LOCATION%', location);
+
+  var cleanup = {};
+  Object
+    .entries(origin.cleanup)
+    .forEach(function(entry) {
+      var key = entry[0];
+      var minBound = entry[1][0];
+      var maxBound = entry[1][1];
+
+      cleanup[key] = randRange(minBound, maxBound);
+    });
+
+  return {
+    tip: tip,
+    cleanup: cleanup,
+  };
+}
+
 var ATTRIBUTES = [
   'animalistic',
   'areWeCoolYet',
@@ -635,91 +720,6 @@ function generateItemNo() {
   return number;
 }
 
-var ORIGINS = {
-  rumors: {
-    tip: 'Rumors are circulating of %OCCURRENCE% near %LOCATION%',
-    cleanup: {
-      waste: [0, 30],
-      records: [0, 15],
-      memories: [2, 12],
-    },
-  },
-  eyewitness: {
-    tip: 'Eyewitnesses report %OCCURRENCE% nearby %LOCATION%',
-    cleanup: {
-      waste: [0, 30],
-      records: [0, 20],
-      memories: [4, 16],
-    },
-  },
-  socialMedia: {
-    tip: 'Social media reports suggest %OCCURRENCE% at %LOCATION%',
-    cleanup: {
-      waste: [0, 30],
-      records: [10, 40],
-      memories: [8, 25],
-    },
-  },
-  police: {
-    tip: 'Police communications suggest %OCCURRENCE% at %LOCATION%',
-    cleanup: {
-      waste: [0, 30],
-      records: [5, 10],
-      memories: [4, 12],
-    },
-  },
-  news: {
-    tip: 'Local news report says %OCCURRENCE% nearby %LOCATION%',
-    cleanup: {
-      waste: [10, 30],
-      records: [15, 40],
-      memories: [20, 50],
-    },
-  },
-  sensors: {
-    tip: 'Foundation sensors detect %OCCURRENCE% around the area of %LOCATION%',
-    cleanup: {
-      waste: [20, 60],
-      records: [0, 20],
-      memories: [0, 20],
-    },
-  },
-  surveillance: {
-    tip: 'Foundation surveillance detects %OCCURRENCE% around the area of %LOCATION%',
-    cleanup: {
-      waste: [0, 60],
-      records: [0, 40],
-      memories: [0, 40],
-    },
-  },
-};
-
-function generateOrigin(occurrence, location, origin = null) {
-  if (origin === null) {
-    origin = randElement(Object.values(ORIGINS));
-  }
-
-  var tip = origin.tip
-    .replace('%OCCURRENCE%', occurrence)
-    .replace('%LOCATION%', location);
-
-  var cleanup = {};
-  Object
-    .entries(origin.cleanup)
-    .forEach(function(entry) {
-      var key = entry[0];
-      var minBound = entry[1][0];
-      var maxBound = entry[1][1];
-
-      cleanup[key] = randRange(minBound, maxBound);
-    });
-
-  return {
-    tip: tip,
-    cleanup: cleanup,
-  };
-}
-
 // Helpers
 function numericSuffix(number) {
   switch (number % 10) {
@@ -754,7 +754,7 @@ function shuffle(array) {
   var temp, randIdx;
 
   while (0 !== idx) {
-    randIdx = Math.floor(Maht.random() idx);
+    randIdx = Math.floor(Math.random(), idx);
     idx--;
 
     temp = array[idx];
