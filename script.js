@@ -12,10 +12,9 @@ var context = {
   agents: 0,
   info: 0,
   attributes: new Set(),
+  anomalies: {},
+  recovery: [],
 };
-
-var anomalies = {};
-var recovery = [];
 
 // States or actions
 function intro2() {
@@ -31,6 +30,7 @@ function commandFirst() {
 
   // Generate first anomaly
   var anomaly = generateAnomaly();
+  setActiveAnomaly(anomaly);
 
   setNotice([
     '<p>The currently active report, ' + anomaly.number + ', is bolded.',
@@ -70,7 +70,9 @@ function commandRest() {
   context.state = 'command-rest';
 
   setNotice([
-    '<p>The first PAR has been handled!</p>',
+    '<p>Your first PAR has been handled!',
+    'Congrats, you are all set to triage new reports ',
+    'and help maintain normalcy.</p>',
   ]);
 }
 
@@ -85,10 +87,10 @@ function setNotice(parts) {
 }
 
 function appendRecovery(entry) {
-  recovery.push(entry);
+  context.recovery.push(entry);
 
-  if (recovery.length >= 20) {
-    recovery.shift();
+  if (context.recovery.length >= 20) {
+    context.recovery.shift();
   }
 
   updateRecovery();
@@ -97,12 +99,14 @@ function appendRecovery(entry) {
 // DOM
 function updateReports() {
   var parts = Object
-    .values(anomalies)
+    .values(context.anomalies)
     .map(function(anomaly) {
       var html = '[' + anomaly.number + ']';
 
-      if (anomaly.number === context.anomaly.number) {
-        html = '<b>' + html + '</b>';
+      if (context.anomaly !== null) {
+        if (anomaly.number === context.anomaly.number) {
+          html = '<b>' + html + '</b>';
+        }
       }
 
       html += ' ' + anomaly.tip + '.';
@@ -190,7 +194,7 @@ function updateActions() {
 }
 
 function updateRecovery() {
-  document.getElementById('recovery').innerHTML = recovery.join('<br>');
+  document.getElementById('recovery').innerHTML = context.recovery.join('<br>');
 }
 
 function cleanupDone() {
@@ -284,8 +288,6 @@ function sendPi1() {
 function designate() {
   appendRecovery(context.anomaly.number + ' has been preliminarily contained, and an SCP designation has been requested.');
 
-  // TODO
-
   updateCapital(40);
   clearCurrentAnomaly();
 }
@@ -308,7 +310,7 @@ function clearCurrentAnomaly() {
   }
 
   var number = context.anomaly.number;
-  delete anomalies[number];
+  delete context.anomalies[number];
   context.anomaly = null;
   context.costs = {
     waste: 0,
@@ -330,6 +332,15 @@ function clearCurrentAnomaly() {
 
   document.getElementById('btn-designate').setAttribute('disabled', '');
   document.getElementById('btn-dismiss').setAttribute('disabled', '');
+
+  // Generate new anomalies
+  var anomalies = [];
+  var count = randRange(1, 4);
+  for (var i = 0; i < count; i++) {
+    anomalies.push(generateAnomaly());
+  }
+
+  setActiveAnomaly(randElement(anomalies));
 }
 
 function runAction(actionName) {
@@ -919,11 +930,14 @@ function generateAnomaly() {
     explained: explained,
   };
 
-  anomalies[number] = anomaly;
-  context.anomaly = anomaly;
-  Object.assign(context.costs, anomaly.cleanup);
+  context.anomalies[number] = anomaly;
   updateReports();
   return anomaly;
+}
+
+function setActiveAnomaly(anomaly) {
+  context.anomaly = anomaly;
+  Object.assign(context.costs, anomaly.cleanup);
 }
 
 function generateItemNo() {
@@ -931,7 +945,7 @@ function generateItemNo() {
 
   do {
     number = 'PAR-' + randRange(10000, 99999);
-  } while(anomalies[number] !== undefined);
+  } while(context.anomalies[number] !== undefined);
 
   return number;
 }
