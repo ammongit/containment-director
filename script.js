@@ -194,7 +194,7 @@ function investigate() {
     if (randRange(2)) {
       appendRecovery('Agents have determined that the phenomenon did not occur.');
     } else {
-      appendRecovery('Agents have determined that the phenomenon did was mundane.');
+      appendRecovery('Agents have determined that the phenomenon was mundane.');
     }
 
     context.attributes.add('explained');
@@ -676,7 +676,7 @@ var ATTRIBUTES = {
   electrical: 'have electrical properties',
   hostile: 'is hostile towards personnel',
   humanoid: 'is humanoid',
-  immobile: 'cannot be feasibly moved',
+  immobile: 'unable to be feasibly moved',
   marshallCarterAndDark: 'the property of Marshall, Carter, and Dark Ltd.',
   ontokinetic: 'a reality-bending anomaly',
   online: 'internet-based',
