@@ -38,6 +38,7 @@ function commandFirst() {
   ]);
 
   updateActions();
+  updateCapital();
 }
 
 function continueFinished() {
@@ -79,7 +80,7 @@ function updateReports() {
   document.getElementById('reports').innerHTML = parts.join('');
 }
 
-function updateCapital(value) {
+function updateCapital(value = 0) {
   context.capital += value;
 
   document.getElementById('capital').innerHTML = String(context.capital);
@@ -93,7 +94,6 @@ function updateCapital(value) {
 }
 
 function updateActions() {
-  // TODO multiple calls
   var parts = ACTIONS.map(function(action) {
     var visible = action.visible === undefined || action.visible();
     if (!visible) {
@@ -107,7 +107,8 @@ function updateActions() {
     ];
 
     action.buttons.forEach(function(button) {
-      parts.push('<button action="');
+      parts.push('<button onclick="');
+      parts.push('updateCapital(-' + button.capitalCost + ');');
       parts.push(button.execute);
       parts.push('" ');
 
@@ -139,6 +140,12 @@ function updateRecovery() {
 }
 
 // Actions
+function investigate() {
+  appendRecovery('Agents on-site are investigating lead ' + context.anomaly.item + '.');
+
+  // TODO
+}
+
 function designate() {
   appendRecovery(context.anomaly.item + ' has been preliminarily contained, and an SCP designation has been requested.');
 
@@ -218,6 +225,8 @@ var ACTIONS = [
     buttons: [
       {
         label: '>',
+        capitalCost: 2,
+        execute: 'investigate()',
       },
     ],
   },
