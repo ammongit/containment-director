@@ -57,6 +57,23 @@ function commandThird() {
   ]);
 }
 
+function commandFourth() {
+  context.state = 'command-fourth';
+
+  setNotice([
+    '<p>Now that the anomaly has been contained or explained,',
+    'it is time to clean-up the scene and administer amnestics.</p>',
+  ]);
+}
+
+function commandRest() {
+  context.state = 'command-rest';
+
+  setNotice([
+    '<p>The first PAR has been handled!</p>',
+  ]);
+}
+
 function continueFinished() {
   document.getElementById('finished').style = 'display: none';
   document.getElementById('command').style = '';
@@ -158,10 +175,17 @@ function updateActions() {
 
   if (context.attributes.has('contained')) {
     allowDesignate();
+
   }
 
   if (context.attributes.has('explained')) {
     allowDismiss();
+  }
+
+  if (context.attributes.has('contained') || context.attributes.has('explained')) {
+    if (context.state === 'command-third') {
+      commandFourth();
+    }
   }
 }
 
