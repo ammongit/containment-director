@@ -212,6 +212,9 @@ var ACTIONS = [
       records: 0,
       memories: 2,
     },
+    enabled: function() {
+      return context.agents > 0;
+    },
     buttons: [
       {
         label: '>',
@@ -253,6 +256,42 @@ var ACTIONS = [
         label: '>>',
         capitalCost: 2,
         execute: 'actionQuarantine()',
+      },
+    ],
+  },
+  {
+    name: 'relocate',
+    description: 'Relocate to Site-28',
+    costs: {
+      records: 0,
+      memories: 5,
+    },
+    enabled: function() {
+      // TODO
+    },
+    buttons: [
+      {
+        label: '>>',
+        capitalCost: 2,
+        execute: 'containRelocate()',
+      },
+    ],
+  },
+  {
+    name: 'contain',
+    description: 'Contain on-site',
+    costs: {
+      records: 10,
+      memories: 5,
+    },
+    enabled: function() {
+      // TODO
+    },
+    buttons: [
+      {
+        label: '>>',
+        capitalCost: 2,
+        execute: 'containOnSite()',
       },
     ],
   },
