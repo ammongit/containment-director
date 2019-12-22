@@ -6,9 +6,8 @@ var context = {
   finished: 0,
   anomaly: null,
   costs: {
-    waste: 0,
-    memories: 0,
     records: 0,
+    memories: 0,
   },
   agents: 0,
   attributes: new Set(),
@@ -80,6 +79,11 @@ function updateReports() {
   document.getElementById('reports').innerHTML = parts.join('');
 }
 
+function updateCosts(records, memories) {
+  context.costs.records += records;
+  context.costs.memories += memories;
+}
+
 function updateCapital(value = 0) {
   context.capital += value;
 
@@ -108,6 +112,7 @@ function updateActions() {
 
     action.buttons.forEach(function(button) {
       parts.push('<button onclick="');
+      parts.push('updateCosts(' + action.costs.records + ', ' + action.costs.memories + ');');
       parts.push('updateCapital(-' + button.capitalCost + ');');
       parts.push(button.execute);
       parts.push('" ');
@@ -144,6 +149,13 @@ function investigate() {
   appendRecovery('Agents on-site are investigating lead ' + context.anomaly.item + '.');
 
   // TODO
+}
+
+function sendAgents(count) {
+  var num = count === 2 ? 'Two' : 'Five';
+  appendRecovery(num + ' field agents were dispatched to ' + context.anomaly.location + '.');
+
+  context.agents += count;
 }
 
 function designate() {
