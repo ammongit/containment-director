@@ -178,7 +178,6 @@ function updateActions() {
 
   if (context.attributes.has('contained')) {
     allowDesignate();
-
   }
 
   if (context.attributes.has('explained')) {
@@ -199,7 +198,10 @@ function updateRecovery() {
 function cleanupDone() {
   return (
     context.costs.records < 5 &&
-    context.costs.memories < 5
+    context.costs.memories < 5 && (
+      context.attributes.has('contained') ||
+      context.attributes.has('explained')
+    )
   );
 }
 
@@ -213,6 +215,11 @@ function allowDismiss() {
   if (cleanupDone()) {
     document.getElementById('btn-dismiss').removeAttribute('disabled');
   }
+}
+
+function disableDesignateDismiss() {
+  document.getElementById('btn-designate').setAttribute('disabled', '');
+  document.getElementById('btn-dismiss').setAttribute('disabled', '');
 }
 
 // Actions
@@ -337,8 +344,7 @@ function clearCurrentAnomaly() {
     }
   }
 
-  document.getElementById('btn-designate').setAttribute('disabled', '');
-  document.getElementById('btn-dismiss').setAttribute('disabled', '');
+  disableDesignateDismiss();
 
   // Generate new anomalies
   var anomalies = [];
