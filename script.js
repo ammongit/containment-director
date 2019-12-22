@@ -2,6 +2,8 @@
 var context = {
   state: 'intro1',
   capital: 100,
+  gotEnding: false,
+  finished: 0,
   anomaly: null,
   costs: {
     waste: 0,
@@ -28,16 +30,17 @@ function commandFirst() {
   document.getElementById('command').style = '';
 
   // Generate first anomaly
-  var anomaly = generateAnomaly(
-    PREMADE_ANOMALY_ATTRIBUTES.first,
-    'leaking blue slime',
-    ORIGINS.eyewitness,
-  );
+  var anomaly = generateAnomaly();
 
   setNotice([
     '<p>The currently active report, ' + anomaly.number + ', is bold.',
     'We should send some field agents to investigate.</p>',
   ]);
+}
+
+function continueFinished() {
+  document.getElementById('finished').style = 'display: none';
+  document.getElementById('command').style = '';
 }
 
 // Column state
@@ -82,22 +85,33 @@ function updateCapital(value) {
   if (context.capital < 5) {
     document.getElementById('command').style = 'display: none';
     document.getElementById('fired').style = '';
+    document.getElementById('fired-count').innerHTML = String(context.finished);
+    context.gotEnding = true;
   }
 }
 
 function updateActions() {
   // TODO multiple calls
   var parts = ACTIONS.map(function(action) {
-    var html = '<button action="runAction(\'' + action.name + '\')"';
-    var enabled = action.enabled === undefined || action.enabled();
+    var parts = [];
 
-    if (!enabled) {
-      html += ' disabled';
-    }
+    action.buttons.forEach(function(button) {
+      var html = '<button action="' + button.execute + '" ';
+      var enabled = (
+        action.enabled === undefined || (
+          action.enabled() && button.capitalCost > context.capital
+        )
+      );
 
-    html += '>Order</button>' + action.description;
+      if (!enabled) {
+        html += ' disabled';
+      }
 
-    return '<p>' + html + '</p>';
+      html += '>' + button.label + '</button>' + action.description;
+      parts.push('<p>' + html + '</p>');
+    });
+
+    return ''.join(parts);
   });
 
   document.getElementById('actions').innerHTML = parts.join('');
@@ -127,6 +141,8 @@ function dismiss() {
 }
 
 function clearCurrentAnomaly() {
+  context.finished += 1;
+
   var item = context.anomaly.item;
   delete anomalies[item];
   context.anomaly = null;
@@ -137,6 +153,15 @@ function clearCurrentAnomaly() {
   };
   context.agents = 0;
   context.attributes.clear();
+
+  if (!context.gotEnding) {
+    if (context.finished > 50 || context.capital > 500) {
+      document.getElementById('command').style = 'display: none';
+      document.getElementById('finished').style = '';
+      document.getElementById('finished-count').innerHTML = String(context.finished);
+      context.gotEnding = true;
+    }
+  }
 }
 
 function runAction(actionName) {
@@ -167,16 +192,12 @@ var ACTIONS = [
       {
         label: '2',
         capitalCost: 2,
-        run: function() {
-          sendAgents(2);
-        },
+        execute: 'sendAgents(2)',
       },
       {
         label: '5',
         capitalCost: 5,
-        run: function() {
-          sendAgents(5);
-        },
+        execute: 'sendAgents(5)',
       },
     ],
   },
@@ -191,6 +212,11 @@ var ACTIONS = [
       return context.agents > 0 && !context.attributes.has('quarantine');
     },
     buttons: [
+      {
+        label: '>>',
+        capitalCost: 2,
+        execute: 'actionQuarantine()',
+      },
     ],
   },
   {
@@ -204,6 +230,13 @@ var ACTIONS = [
     enabled: function() {
       return context.agents > 0 && context.costs.memories >= 5;
     },
+    buttons: [
+      {
+        label: '',
+        capitalCost: 2,
+        execute: 'actionAmnesticize()',
+      },
+    ],
   },
   {
     name: 'misinfo',
@@ -215,6 +248,13 @@ var ACTIONS = [
     enabled: function() {
       return context.agents > 0 && context.costs.records >= 5;
     },
+    buttons: [
+      {
+        label: '',
+        capitalCost: 2,
+        execute: 'actionMisinfo()',
+      },
+    ],
   },
   {
     name: 'sendPi1',
@@ -222,6 +262,9 @@ var ACTIONS = [
     costs: {
       records: 0,
       memories: 2,
+    },
+    enabled: function() {
+      return context.finished > 10;
     },
   },
 ];
@@ -326,6 +369,7 @@ function randomLocation() {
 }
 
 function generateAnomaly(attributeProbabilities, occurrence, origin = null) {
+  // TODO
   var item = generateItemNo();
   var location = randomLocation();
 
